@@ -1,2 +1,9 @@
-# otus_java_2017_10_starikov
-Home tasks for Otus.ru course "Разработчик Java", group 2017_10
+
+# Home tasks for Otus.ru course "Разработчик Java"
+
+Group 2017_10
+
+### Student
+Aleksei Starikov (Алексей Стариков)
+
+starikovaleksei1992@mail.ru
