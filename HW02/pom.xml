@@ -35,7 +35,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.hw02.Main</mainClass>
+                            <mainClass>ru.otus.hw02.MemoryStand</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -59,7 +59,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.hw02.Main</mainClass>
+                            <mainClass>ru.otus.hw02.MemoryStand</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
