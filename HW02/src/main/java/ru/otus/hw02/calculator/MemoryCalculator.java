@@ -1,7 +1,7 @@
 package ru.otus.hw02.calculator;
 
 import ru.otus.hw02.constants.MeasuredType;
-import ru.otus.hw02.occupier.MemoryOccupier;
+import ru.otus.hw02.occupier.*;
 import ru.otus.hw02.printer.MemoryResultPrinter;
 
 import static ru.otus.hw02.constants.CalcConstants.BIG_NUMBER;
@@ -33,16 +33,16 @@ public class MemoryCalculator implements Calculator {
     private void occupyMemory(MeasuredType type) {
         switch (type) {
             case EMPTY_STRING:
-                MemoryOccupier.occupyEmptyString();
+                new EmptyStringOccupier().occupy();
                 break;
             case STRING_POOL_EMPTY_STRING:
-                MemoryOccupier.occupyEmptyStringFromStringPool();
+                new EmptyStringFromStringPoolOccupier().occupy();
                 break;
             case OBJECT:
-                MemoryOccupier.occupyObject();
+                new ObjectOccupier().occupy();
                 break;
             case MY_OBJECT:
-                MemoryOccupier.occupyMyObject();
+                new MyObjectOccupier().occupy();
                 break;
         }
     }

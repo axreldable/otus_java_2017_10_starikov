@@ -1,6 +1,6 @@
-package ru.otus.hw02.calculator;
+package ru.otus.hw02.calculator.container;
 
-import ru.otus.hw02.occupier.MemoryOccupier;
+import ru.otus.hw02.occupier.container.ContainerMemoryOccupier;
 
 import static ru.otus.hw02.constants.CalcConstants.NOT_SO_BIG_NUMBER;
 
@@ -12,7 +12,7 @@ public class ContainerMemoryCalculator implements ContainerCalculator {
         System.gc();
         long startMem = getMemory();
 
-        MemoryOccupier.occupyMemoryByCollection(length);
+        new ContainerMemoryOccupier().occupy(length);
 
         long endMem = getMemory();
         System.gc();

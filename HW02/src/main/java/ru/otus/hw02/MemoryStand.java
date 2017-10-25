@@ -1,6 +1,6 @@
 package ru.otus.hw02;
 
-import ru.otus.hw02.calculator.ContainerMemoryCalculator;
+import ru.otus.hw02.calculator.container.ContainerMemoryCalculator;
 import ru.otus.hw02.calculator.MemoryCalculator;
 import ru.otus.hw02.printer.ContainerMemRezPrinter;
 
