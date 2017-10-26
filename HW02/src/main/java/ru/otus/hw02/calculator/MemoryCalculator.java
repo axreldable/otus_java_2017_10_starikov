@@ -14,7 +14,7 @@ public class MemoryCalculator implements Calculator {
         System.gc();
         long startMem = getMemory();
 
-        occupyMemory(type);
+        getOccupier(type).occupy();
 
         long endMem = getMemory();
         System.gc();
@@ -30,21 +30,18 @@ public class MemoryCalculator implements Calculator {
                 .print();
     }
 
-    private void occupyMemory(MeasuredType type) {
+    private Occupier getOccupier(MeasuredType type) {
         switch (type) {
             case EMPTY_STRING:
-                new EmptyStringOccupier().occupy();
-                break;
+                return new EmptyStringOccupier();
             case STRING_POOL_EMPTY_STRING:
-                new EmptyStringFromStringPoolOccupier().occupy();
-                break;
+                return new EmptyStringFromStringPoolOccupier();
             case OBJECT:
-                new ObjectOccupier().occupy();
-                break;
+                return new ObjectOccupier();
             case MY_OBJECT:
-                new MyObjectOccupier().occupy();
-                break;
+                return new MyObjectOccupier();
         }
+        throw new UnsupportedOperationException("No such occupier");
     }
 
     private long getMemory() {
