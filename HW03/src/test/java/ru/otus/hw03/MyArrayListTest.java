@@ -3,6 +3,7 @@ package ru.otus.hw03;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.otus.hw03.collection.MyArrayList;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,13 +31,23 @@ public class MyArrayListTest {
     }
 
     @Test
-    public void testCopy() {
+    public void testCopyTo() {
         List<Integer> src = new MyArrayList<>();
         Collections.addAll(src, 1, 2, 3);
         Collections.addAll(myArrayList, 10, 11, 12);
         Collections.copy(myArrayList, src);
 
         checkList(myArrayList);
+    }
+
+    @Test
+    public void testCopyFrom() {
+        Collections.addAll(myArrayList, 1, 2, 3);
+        List<Integer> dest = new MyArrayList<>();
+        Collections.addAll(dest, 10, 11, 12);
+        Collections.copy(dest, myArrayList);
+
+        checkList(dest);
     }
 
     private void checkList(List<Integer> list) {
@@ -47,6 +58,27 @@ public class MyArrayListTest {
         assertTrue(!list.contains(10));
         assertTrue(!list.contains(11));
         assertTrue(!list.contains(12));
+    }
+
+    @Test
+    public void testCopyMoreThenThreshold() {
+        List<Integer> src = new MyArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            src.add(i);
+        }
+        for (int i = 10; i > 0; i--) {
+            myArrayList.add(i);
+        }
+        Collections.copy(myArrayList, src);
+
+        checkLongList(myArrayList);
+    }
+
+    private void checkLongList(List<Integer> list) {
+        assertEquals(10, list.size());
+        for (int i = 0; i < 10; i++) {
+            assertEquals(i, (int) list.get(i));
+        }
     }
 
     @Test
