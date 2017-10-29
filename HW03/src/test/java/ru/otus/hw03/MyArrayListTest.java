@@ -90,14 +90,6 @@ public class MyArrayListTest {
     }
 
     private void checkSortList(List<Integer> list) {
-        assertEquals(6, list.size());
-        assertTrue(list.contains(1));
-        assertTrue(list.contains(2));
-        assertTrue(list.contains(3));
-        assertTrue(list.contains(9));
-        assertTrue(list.contains(25));
-        assertTrue(list.contains(44));
-        assertTrue(!list.contains(105));
         assertArrayEquals(new Integer[] {1, 2, 3, 9, 25, 44}, list.toArray());
     }
 

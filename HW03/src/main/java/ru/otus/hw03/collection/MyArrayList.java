@@ -12,7 +12,7 @@ public class MyArrayList<T> implements List<T> {
 
     public MyArrayList(int initialCapacity) {
         if (initialCapacity >= 0) {
-            this.elementData = new Object[initialCapacity > DEFAULT_CAPACITY ? initialCapacity : DEFAULT_CAPACITY];
+            this.elementData = new Object[initialCapacity > 0 ? initialCapacity : DEFAULT_CAPACITY];
         } else {
             throw new IllegalArgumentException("Illegal Capacity: "+
                     initialCapacity);
