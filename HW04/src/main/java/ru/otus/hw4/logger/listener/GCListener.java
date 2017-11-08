@@ -1,6 +1,7 @@
-package ru.otus.hw4.logger;
+package ru.otus.hw4.logger.listener;
 
 import com.sun.management.GarbageCollectionNotificationInfo;
+import ru.otus.hw4.logger.info.GcInfo;
 
 import javax.management.Notification;
 import javax.management.NotificationListener;
@@ -13,7 +14,9 @@ public class GCListener implements NotificationListener {
     @Override
     public void handleNotification(Notification notification, Object handback) {
         if (notification.getType().equals(GarbageCollectionNotificationInfo.GARBAGE_COLLECTION_NOTIFICATION)) {
-            GarbageCollectionNotificationInfo info = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
+            GarbageCollectionNotificationInfo notificationInfo = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
+
+            logger.info(GcInfo.from(notificationInfo).toString());
         }
     }
 }

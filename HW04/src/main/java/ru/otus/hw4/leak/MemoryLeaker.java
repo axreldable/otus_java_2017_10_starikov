@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MemoryLeaker implements Leaker {
+
+    @SuppressWarnings({"InfiniteLoopStatement", "MismatchedQueryAndUpdateOfCollection"})
     @Override
     public void leak() {
         List<String> stringList = new ArrayList<>();
