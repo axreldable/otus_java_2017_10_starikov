@@ -1,5 +1,6 @@
 package ru.otus.hw4;
 
+import ru.otus.hw4.leak.Leaker;
 import ru.otus.hw4.leak.MemoryLeaker;
 import ru.otus.hw4.logger.GcLogger;
 
@@ -16,7 +17,8 @@ public class Main {
     public static void main(String[] args) throws IOException{
         new GcLogger().start();
         try {
-            new MemoryLeaker().leak();
+            Leaker leaker = new MemoryLeaker();
+            leaker.leak();
         } catch (OutOfMemoryError e) {
             // don't write in file gc_0*.log without it
             BufferedReader fileReader = new BufferedReader(new FileReader("gc.log"));

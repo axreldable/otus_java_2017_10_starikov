@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class LogMapper implements Mapper<ResultObject>{
+public class LogMapper {
     private String logFileName;
     private boolean isOldNamed;
     private boolean isYoungNamed;
@@ -17,7 +17,6 @@ public class LogMapper implements Mapper<ResultObject>{
         this.logFileName = logFileName;
     }
 
-    @Override
     public ResultObject map() {
         ResultObject resultObject = new ResultObject(logFileName);
         try {
@@ -61,7 +60,7 @@ public class LogMapper implements Mapper<ResultObject>{
 //    INFO: Generation ='OLD', GC name ='MarkSweepCompact', GC duration='15'
     private String getGcName(String nextString) {
         nextString = nextString.substring(0, nextString.lastIndexOf(','));
-        return nextString.substring(nextString.lastIndexOf('='), nextString.length()-1);
+        return nextString.substring(nextString.lastIndexOf('=')+2, nextString.length()-1);
     }
 
     private int getDuration(String nextString) {

@@ -41,6 +41,8 @@ public class ResultObject {
                 ", oldGcCounter=" + oldGcCounter +
                 ", youngGcDuration=" + youngGcDuration +
                 ", oldGcDuration=" + oldGcDuration +
+                ", meanDurationOld=" + oldGcDuration / oldGcCounter +
+                ", meanDurationYoung=" + youngGcDuration / youngGcCounter +
                 '}';
     }
 }
