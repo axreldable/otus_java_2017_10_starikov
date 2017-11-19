@@ -8,7 +8,6 @@ public class Main {
         runTestClass();
         System.out.println("------------------------------");
         runAllTests();
-        // TODO: Java 8
     }
 
     private static void runTestClass() {

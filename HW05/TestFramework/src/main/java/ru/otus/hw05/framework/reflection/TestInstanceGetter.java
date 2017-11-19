@@ -9,8 +9,9 @@ import ru.otus.hw05.framework.model.TestInstance;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TestInstanceGetter {
     private Reflections reflections;
@@ -20,20 +21,13 @@ public class TestInstanceGetter {
     }
 
     public Set<TestInstance> getTests() {
-        Set<Method> testMethods = reflections.getMethodsAnnotatedWith(Test.class);
-
-        Set<TestInstance> testInstances = new HashSet<TestInstance>();
-
-        for (Method testMethod : testMethods) {
-            testInstances.add(
-                    TestInstance.builder()
-                            .beforeMethods(getBeforeMethods(testMethod))
-                            .testMethod(testMethod)
-                            .afterMethods(getAfterMethods(testMethod))
-                            .build()
-            );
-        }
-        return testInstances;
+        return reflections.getMethodsAnnotatedWith(Test.class).stream()
+                .map(testMethod -> TestInstance.builder()
+                        .beforeMethods(getBeforeMethods(testMethod))
+                        .testMethod(testMethod)
+                        .afterMethods(getAfterMethods(testMethod))
+                        .build())
+                .collect(Collectors.toSet());
     }
 
     private Set<Method> getAfterMethods(Method testMethod) {
@@ -45,13 +39,8 @@ public class TestInstanceGetter {
     }
 
     private Set<Method> getAnnotatedMethods(Method testMethod, final Class<? extends Annotation> annotation) {
-        Set<Method> annotatedMethods = new HashSet<Method>();
-
-        for (Method method : testMethod.getDeclaringClass().getDeclaredMethods()) {
-            if (method.isAnnotationPresent(annotation)) {
-                annotatedMethods.add(method);
-            }
-        }
-        return annotatedMethods;
+        return Arrays.stream(testMethod.getDeclaringClass().getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(annotation))
+                .collect(Collectors.toSet());
     }
 }
