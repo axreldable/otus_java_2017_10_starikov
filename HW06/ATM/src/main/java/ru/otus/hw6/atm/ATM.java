@@ -3,7 +3,6 @@ package ru.otus.hw6.atm;
 import ru.otus.hw6.atm.cash.CashType;
 import ru.otus.hw6.atm.request.Request;
 import ru.otus.hw6.atm.response.Response;
-import ru.otus.hw6.atm.response.ResponseFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,8 +41,8 @@ public class ATM {
         if (balance < cashAmount) {
             return badGetNotEnoughMoneyResponse(balance);
         }
-        if (cashAmount % CashType.getMinValue() != 0) {
-            return ResponseFactory.badGetMultipleResponse();
+        if (cashAmount % getMinValue() != 0) {
+            return badGetMultipleResponse();
         }
         Map<CashType, Integer> giveCash = getNeedCashMap(cashAmount);
         if (!isEnoughCashType) {
