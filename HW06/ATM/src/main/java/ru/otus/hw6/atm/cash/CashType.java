@@ -1,5 +1,7 @@
 package ru.otus.hw6.atm.cash;
 
+import ru.otus.hw6.atm.exception.UnknownCashValueException;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +54,7 @@ public enum CashType implements Comparable<CashType> {
                 return THOUSAND;
             }
             default: {
-                return null; // ???
+                throw new UnknownCashValueException("unknown cash value: " + value);
             }
         }
     }

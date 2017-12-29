@@ -1,39 +1,48 @@
 package ru.otus.hw6.emulator;
 
 import ru.otus.hw6.atm.ATM;
-import ru.otus.hw6.emulator.printer.GreetingPrinter;
+import ru.otus.hw6.atm.request.Request;
+import ru.otus.hw6.atm.response.Response;
+import ru.otus.hw6.emulator.exception.ExitException;
+import ru.otus.hw6.emulator.exception.UnknownCommandTypeException;
+import ru.otus.hw6.emulator.exception.WrongArgumentsException;
+import ru.otus.hw6.emulator.parser.CommandParser;
+import ru.otus.hw6.emulator.printer.Printer;
+import ru.otus.hw6.emulator.printer.ResponsePrinter;
 
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * class for process commands to ATM and process response from ATM
+ * class for process commands to and response from ATM
  */
 public class ATMEmulator {
     private ATM atm;
-    private GreetingPrinter printer;
+    private Printer printer;
 
     public ATMEmulator(ATM atm) {
         this.atm = atm;
-        printer = new GreetingPrinter();
+        printer = new Printer();
     }
 
     public void run() {
         Scanner scanner = new Scanner(System.in);
-        Logger logger = Logger.getLogger(ATMEmulator.class.getName());
 
         while (true) {
             try {
-                printer.print();
+                printer.printGreeting();
                 printer.printCursor();
                 String nextCommand = scanner.nextLine();
 
-                System.out.println(nextCommand);
-            } catch (RuntimeException e) {
-                logger.log(Level.INFO, e.getMessage());
+                Request request = CommandParser.parse(nextCommand);
+                Response response = atm.execute(request);
+                ResponsePrinter.print(response);
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                break;
+            } catch (UnknownCommandTypeException | WrongArgumentsException e) {
+                System.out.println(e.getMessage());
             } catch (Exception e) {
-                logger.log(Level.WARNING, e.getMessage());
+                e.printStackTrace();
             }
         }
     }

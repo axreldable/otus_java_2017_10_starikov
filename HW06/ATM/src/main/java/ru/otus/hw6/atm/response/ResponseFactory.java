@@ -32,7 +32,7 @@ public class ResponseFactory {
         return Response.builder()
                 .responseType(OK)
                 .message(ATM_BALANCE)
-                .cash(cash)
+                .cash(cash) // show ATM cash
                 .balance(balance)
                 .build();
     }
@@ -41,7 +41,7 @@ public class ResponseFactory {
         return Response.builder()
                 .responseType(OK)
                 .message(ATM_PUT_OK)
-                .cash(cash)
+                .cash(cash) // show received cash
                 .build();
     }
 

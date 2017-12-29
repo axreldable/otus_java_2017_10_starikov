@@ -12,7 +12,12 @@ import java.util.Map;
 import static ru.otus.hw6.atm.cash.CashType.*;
 import static ru.otus.hw6.atm.response.ResponseFactory.*;
 
-
+/**
+ * ATM core class.
+ * Has one public method execute, which get standard request
+ * and return OK response if the command successfully complete
+ * or ERROR if the command failed.
+ */
 public class ATM {
     private Map<CashType, Integer> cashMap = new HashMap<>();
     private int balance = 0;

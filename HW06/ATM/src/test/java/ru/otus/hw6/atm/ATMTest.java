@@ -17,8 +17,6 @@ import static ru.otus.hw6.atm.response.type.Type.ERROR;
 import static ru.otus.hw6.atm.response.type.Type.OK;
 
 public class ATMTest {
-    private static final String BED_COMMAND = "unknown command";
-
     private static final String ATM_BALANCE = "ATM Balance";
 
     private static final String ATM_PUT_BAD = "ATM can receive only positive cash";
