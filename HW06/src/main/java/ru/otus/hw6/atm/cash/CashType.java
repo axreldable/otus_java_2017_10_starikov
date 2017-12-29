@@ -1,5 +1,15 @@
 package ru.otus.hw6.atm.cash;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
+
+/**
+ * Cash type in the ATM.
+ * You can add new bills here, but the logic will remain the same
+ */
 public enum CashType implements Comparable<CashType> {
     ONE_HUNDRED(100),
     FIVE_HUNDRED(500),
@@ -16,10 +26,21 @@ public enum CashType implements Comparable<CashType> {
     }
 
     public static int getMinValue() {
-        return ONE_HUNDRED.getValue();
+        return getCashValues().stream().min(Integer::compareTo).get();
     }
 
-    public static CashType parseType(int value) {
+    public static List<Integer> getCashValues() {
+        return stream(CashType.values()).map(CashType::getValue).collect(Collectors.toList());
+    }
+
+    public static List<Integer> getSortReverseCashValues() {
+        List<Integer> cashValues = getCashValues();
+        Collections.sort(cashValues);
+        Collections.reverse(cashValues);
+        return cashValues;
+    }
+
+    public static CashType parseCash(int value) {
         switch (value) {
             case 100: {
                 return ONE_HUNDRED;
@@ -30,8 +51,10 @@ public enum CashType implements Comparable<CashType> {
             case 1000: {
                 return THOUSAND;
             }
+            default: {
+                return null; // ???
+            }
         }
-        return null;
     }
 
 

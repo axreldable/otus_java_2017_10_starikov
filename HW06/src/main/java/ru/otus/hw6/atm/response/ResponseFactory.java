@@ -18,6 +18,7 @@ public class ResponseFactory {
     private static final String ATM_GET_BAD_NEGATIVE_VALUE = "ATM can give only positive values";
     private static final String ATM_GET_BAD_NOT_ENOUGH_MONEY = "ATM can't give cash - not enough money";
     private static final String ATM_GET_BAD_DENOMINATION = "ATM can give cash amount multiple of min value";
+    private static final String ATM_GET_BAD_NOT_ENOUGH_CASH_TYPE = "ATM can't give cash - not enough cash type";
     private static final String ATM_GET_OK = "ATM successfully give money";
 
     public static Response badCommandResponse() {
@@ -71,6 +72,22 @@ public class ResponseFactory {
         return Response.builder()
                 .responseType(ERROR)
                 .message(ATM_GET_BAD_DENOMINATION)
+                .build();
+    }
+
+    public static Response badGetNotEnoughCashTypeResponse(Map<CashType, Integer> cash) {
+        return Response.builder()
+                .responseType(ERROR)
+                .message(ATM_GET_BAD_NOT_ENOUGH_CASH_TYPE)
+                .cash(cash)
+                .build();
+    }
+
+    public static Response okGetResponse(Map<CashType, Integer> cash) {
+        return Response.builder()
+                .responseType(OK)
+                .message(ATM_GET_OK)
+                .cash(cash)
                 .build();
     }
 }

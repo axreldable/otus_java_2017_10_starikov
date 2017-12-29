@@ -7,17 +7,17 @@ import ru.otus.hw6.atm.response.ResponseFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static ru.otus.hw6.atm.cash.CashType.FIVE_HUNDRED;
-import static ru.otus.hw6.atm.cash.CashType.ONE_HUNDRED;
-import static ru.otus.hw6.atm.cash.CashType.THOUSAND;
+import static ru.otus.hw6.atm.cash.CashType.*;
 import static ru.otus.hw6.atm.response.ResponseFactory.*;
 
 
 public class ATM {
-    private Map<CashType, Integer> cashMap = new HashMap<CashType, Integer>();
+    private Map<CashType, Integer> cashMap = new HashMap<>();
     private int balance = 0;
+    private boolean isEnoughCashType = false;
 
     public Response execute(Request request) {
         switch (request.getCommand()) {
@@ -45,40 +45,63 @@ public class ATM {
         if (cashAmount % CashType.getMinValue() != 0) {
             return ResponseFactory.badGetMultipleResponse();
         }
-        Map<CashType, Integer> giveCash = getNeedCashMap(cashAmount, cashMap);
-
-        return null;
+        Map<CashType, Integer> giveCash = getNeedCashMap(cashAmount);
+        if (!isEnoughCashType) {
+            return badGetNotEnoughCashTypeResponse(cashMap);
+        }
+        removeCash(giveCash);
+        recalculateBalance();
+        return okGetResponse(giveCash);
     }
 
-    public static Map<CashType,Integer> getNeedCashMap(int cashAmount, Map<CashType, Integer> cashMap) {
-        // TODO: iterate through enum!
+    private void recalculateBalance() {
+        balance = 0;
+        cashMap.forEach((k, v) -> balance += k.getValue() * v);
+    }
+
+    private void removeCash(Map<CashType, Integer> giveCash) {
+        giveCash.forEach((k, v) -> cashMap.merge(k, v, (oldValue, newValue) -> oldValue - newValue));
+        removeZeroes();
+    }
+
+    private void removeZeroes() {
+        cashMap.entrySet().removeIf(entry -> entry.getValue() == 0);
+    }
+
+    private Map<CashType,Integer> getNeedCashMap(int cashAmount) {
         int remainder = cashAmount;
+        List<Integer> sortCashValues = getSortReverseCashValues();
         Map<CashType, Integer> result = new HashMap<>();
-        while (remainder >= THOUSAND.getValue()) {
-            if (result.get(THOUSAND) != null && (cashMap.get(THOUSAND) == null || result.get(THOUSAND) >= cashMap.get(THOUSAND))) {
-                break;
+        for (Integer value : sortCashValues) {
+            CashType cashType = parseCash(value);
+            while (remainder >= value && result.get(cashType) != cashMap.get(cashType)) {
+                if (!isThereIsNoSuchType(result, cashType) &&
+                        (isThereIsNoCashType(cashType) || isCashTypeHasRunOut(result, cashType)))
+                {
+                    continue;
+                }
+                result.merge(cashType, 1, (oldValue, newValue) -> oldValue + newValue);
+                remainder -= value;
             }
-            result.merge(THOUSAND, 1, (oldValue, newValue) -> oldValue + newValue);
-            remainder -= THOUSAND.getValue();
-        }
-        while (remainder >= FIVE_HUNDRED.getValue()) {
-            if (result.get(FIVE_HUNDRED) != null && (cashMap.get(FIVE_HUNDRED) == null || result.get(FIVE_HUNDRED) >= cashMap.get(FIVE_HUNDRED))) {
-                break;
-            }
-            result.merge(FIVE_HUNDRED, 1, (oldValue, newValue) -> oldValue + newValue);
-            remainder -= FIVE_HUNDRED.getValue();
-        }
-        while (remainder >= ONE_HUNDRED.getValue()) {
-            if (result.get(ONE_HUNDRED) != null && (cashMap.get(ONE_HUNDRED) == null || result.get(ONE_HUNDRED) >= cashMap.get(ONE_HUNDRED))) {
-                break;
-            }
-            result.merge(ONE_HUNDRED, 1, (oldValue, newValue) -> oldValue + newValue);
-            remainder -= ONE_HUNDRED.getValue();
         }
         if (remainder > 0) {
-            throw new RuntimeException("ostatok: " + remainder);
+            isEnoughCashType = false;
+            return null;
         }
+        isEnoughCashType = true;
         return result;
+    }
+
+    private boolean isThereIsNoSuchType(Map<CashType, Integer> map, CashType type) {
+        return map.get(type) == null;
+    }
+
+    private boolean isThereIsNoCashType(CashType type) {
+        return cashMap.get(type) == null;
+    }
+
+    private boolean isCashTypeHasRunOut(Map<CashType, Integer> map, CashType type) {
+        return map.get(type) >= cashMap.get(type);
     }
 
     private Response put(Map<CashType, Integer> cash) {
@@ -91,7 +114,7 @@ public class ATM {
     }
 
     private boolean allValuesPositive(Collection<Integer> entries) {
-        return entries.stream().anyMatch(x -> x <= 0);
+        return entries.stream().allMatch(x -> x > 0);
     }
 
     private void addToCash(Map<CashType, Integer> cash) {
