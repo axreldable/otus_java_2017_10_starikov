@@ -1,4 +1,4 @@
-package ru.otus.hw6.atm.command;
+package ru.otus.hw7.atm.command;
 
 public enum CommandType {
     PUT,

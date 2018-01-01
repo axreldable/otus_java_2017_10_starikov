@@ -1,4 +1,4 @@
-package ru.otus.hw6.atm.exception;
+package ru.otus.hw7.atm.exception;
 
 public class UnknownCashValueException extends RuntimeException {
     public UnknownCashValueException(String message) {

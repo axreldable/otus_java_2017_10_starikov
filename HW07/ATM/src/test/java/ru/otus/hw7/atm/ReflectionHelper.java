@@ -1,4 +1,4 @@
-package ru.otus.hw6.atm;
+package ru.otus.hw7.atm;
 
 import java.lang.reflect.Field;
 

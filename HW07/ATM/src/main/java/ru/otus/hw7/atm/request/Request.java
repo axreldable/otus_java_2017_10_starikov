@@ -1,9 +1,9 @@
-package ru.otus.hw6.atm.request;
+package ru.otus.hw7.atm.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import ru.otus.hw6.atm.cash.CashType;
-import ru.otus.hw6.atm.command.CommandType;
+import ru.otus.hw7.atm.cash.CashType;
+import ru.otus.hw7.atm.command.CommandType;
 
 import java.util.Map;
 

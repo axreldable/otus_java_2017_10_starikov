@@ -1,11 +1,11 @@
-package ru.otus.hw6.atm.response;
+package ru.otus.hw7.atm.response;
 
-import ru.otus.hw6.atm.cash.CashType;
+import ru.otus.hw7.atm.cash.CashType;
 
 import java.util.Map;
 
-import static ru.otus.hw6.atm.response.type.Type.ERROR;
-import static ru.otus.hw6.atm.response.type.Type.OK;
+import static ru.otus.hw7.atm.response.type.Type.ERROR;
+import static ru.otus.hw7.atm.response.type.Type.OK;
 
 public class ResponseFactory {
     private static final String BED_COMMAND = "unknown command";

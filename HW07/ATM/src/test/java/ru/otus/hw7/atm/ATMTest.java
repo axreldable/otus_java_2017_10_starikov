@@ -1,20 +1,19 @@
-package ru.otus.hw6.atm;
+package ru.otus.hw7.atm;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.hw6.atm.cash.CashType;
-import ru.otus.hw6.atm.request.Request;
-import ru.otus.hw6.atm.response.Response;
+import ru.otus.hw7.atm.cash.CashType;
+import ru.otus.hw7.atm.request.Request;
+import ru.otus.hw7.atm.response.Response;
+import ru.otus.hw7.atm.command.CommandType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static ru.otus.hw6.atm.ReflectionHelper.getPrivateField;
-import static ru.otus.hw6.atm.cash.CashType.*;
-import static ru.otus.hw6.atm.command.CommandType.*;
-import static ru.otus.hw6.atm.response.type.Type.ERROR;
-import static ru.otus.hw6.atm.response.type.Type.OK;
+import static ru.otus.hw7.atm.ReflectionHelper.getPrivateField;
+import static ru.otus.hw7.atm.response.type.Type.ERROR;
+import static ru.otus.hw7.atm.response.type.Type.OK;
 
 public class ATMTest {
     private static final String ATM_BALANCE = "ATM Balance";
@@ -140,14 +139,14 @@ public class ATMTest {
 
     private Request createGetRequest(int cashAmount) {
         return Request.builder()
-                .command(GET)
+                .command(CommandType.GET)
                 .cashAmount(cashAmount)
                 .build();
     }
 
     private Request createPutRequest(HashMap<CashType, Integer> inputMap) {
         return Request.builder()
-                .command(PUT)
+                .command(CommandType.PUT)
                 .cash(inputMap)
                 .build();
     }
@@ -156,13 +155,13 @@ public class ATMTest {
         return new HashMap<CashType, Integer>() {
             {
                 if (thousands != 0) {
-                    put(THOUSAND, thousands);
+                    put(CashType.THOUSAND, thousands);
                 }
                 if (fiveHundreds != 0) {
-                    put(FIVE_HUNDRED, fiveHundreds);
+                    put(CashType.FIVE_HUNDRED, fiveHundreds);
                 }
                 if (oneHundreds != 0) {
-                    put(ONE_HUNDRED, oneHundreds);
+                    put(CashType.ONE_HUNDRED, oneHundreds);
                 }
             }
         };
@@ -171,16 +170,16 @@ public class ATMTest {
     private HashMap<CashType,Integer> createAnyCashMap(int thousands, int fiveHundreds, int oneHundreds) {
         return new HashMap<CashType, Integer>() {
             {
-                put(THOUSAND, thousands);
-                put(FIVE_HUNDRED, fiveHundreds);
-                put(ONE_HUNDRED, oneHundreds);
+                put(CashType.THOUSAND, thousands);
+                put(CashType.FIVE_HUNDRED, fiveHundreds);
+                put(CashType.ONE_HUNDRED, oneHundreds);
             }
         };
     }
 
     private Request createBalanceRequest() {
         return Request.builder()
-                .command(BALANCE)
+                .command(CommandType.BALANCE)
                 .build();
     }
 

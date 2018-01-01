@@ -1,16 +1,15 @@
-package ru.otus.hw6.atm;
+package ru.otus.hw7.atm;
 
-import ru.otus.hw6.atm.cash.CashType;
-import ru.otus.hw6.atm.request.Request;
-import ru.otus.hw6.atm.response.Response;
+import ru.otus.hw7.atm.cash.CashType;
+import ru.otus.hw7.atm.request.Request;
+import ru.otus.hw7.atm.response.Response;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ru.otus.hw6.atm.cash.CashType.*;
-import static ru.otus.hw6.atm.response.ResponseFactory.*;
+import static ru.otus.hw7.atm.response.ResponseFactory.*;
 
 /**
  * ATM core class.
@@ -46,7 +45,7 @@ public class ATM {
         if (balance < cashAmount) {
             return badGetNotEnoughMoneyResponse(balance);
         }
-        if (cashAmount % getMinValue() != 0) {
+        if (cashAmount % CashType.getMinValue() != 0) {
             return badGetMultipleResponse();
         }
         Map<CashType, Integer> giveCash = getNeedCashMap(cashAmount);
@@ -74,13 +73,13 @@ public class ATM {
 
     private Map<CashType,Integer> getNeedCashMap(int cashAmount) {
         int remainder = cashAmount;
-        List<Integer> sortCashValues = getSortReverseCashValues();
+        List<Integer> sortCashValues = CashType.getSortReverseCashValues();
         Map<CashType, Integer> result = new HashMap<>();
         for (Integer value : sortCashValues) {
-            CashType cashType = parseCash(value);
+            CashType cashType = CashType.parseCash(value);
             while (remainder >= value && result.get(cashType) != cashMap.get(cashType)) {
-                if (!isThereIsNoSuchType(result, cashType) &&
-                        (isThereIsNoCashType(cashType) || isCashTypeHasRunOut(result, cashType)))
+                if (isThereIsSuchType(result, cashType) &&
+                        (!isThereIsCashType(cashType) || isCashTypeHasRunOut(result, cashType)))
                 {
                     continue;
                 }
@@ -96,12 +95,12 @@ public class ATM {
         return result;
     }
 
-    private boolean isThereIsNoSuchType(Map<CashType, Integer> map, CashType type) {
-        return map.get(type) == null;
+    private boolean isThereIsSuchType(Map<CashType, Integer> map, CashType type) {
+        return map.get(type) != null;
     }
 
-    private boolean isThereIsNoCashType(CashType type) {
-        return cashMap.get(type) == null;
+    private boolean isThereIsCashType(CashType type) {
+        return cashMap.get(type) != null;
     }
 
     private boolean isCashTypeHasRunOut(Map<CashType, Integer> map, CashType type) {

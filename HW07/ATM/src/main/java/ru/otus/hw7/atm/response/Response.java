@@ -1,10 +1,10 @@
-package ru.otus.hw6.atm.response;
+package ru.otus.hw7.atm.response;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import ru.otus.hw6.atm.cash.CashType;
-import ru.otus.hw6.atm.response.type.Type;
+import ru.otus.hw7.atm.cash.CashType;
+import ru.otus.hw7.atm.response.type.Type;
 
 import java.util.Map;
 
