@@ -79,8 +79,8 @@ public class ATM {
         for (Integer value : sortCashValues) {
             CashType cashType = parseCash(value);
             while (remainder >= value && result.get(cashType) != cashMap.get(cashType)) {
-                if (!isThereIsNoSuchType(result, cashType) &&
-                        (isThereIsNoCashType(cashType) || isCashTypeHasRunOut(result, cashType)))
+                if (isThereIsSuchType(result, cashType) &&
+                        (!isThereIsCashType(cashType) || isCashTypeHasRunOut(result, cashType)))
                 {
                     continue;
                 }
@@ -96,12 +96,12 @@ public class ATM {
         return result;
     }
 
-    private boolean isThereIsNoSuchType(Map<CashType, Integer> map, CashType type) {
-        return map.get(type) == null;
+    private boolean isThereIsSuchType(Map<CashType, Integer> map, CashType type) {
+        return map.get(type) != null;
     }
 
-    private boolean isThereIsNoCashType(CashType type) {
-        return cashMap.get(type) == null;
+    private boolean isThereIsCashType(CashType type) {
+        return cashMap.get(type) != null;
     }
 
     private boolean isCashTypeHasRunOut(Map<CashType, Integer> map, CashType type) {

@@ -43,21 +43,11 @@ public enum CashType implements Comparable<CashType> {
     }
 
     public static CashType parseCash(int value) {
-        switch (value) {
-            case 100: {
-                return ONE_HUNDRED;
-            }
-            case 500: {
-                return FIVE_HUNDRED;
-            }
-            case 1000: {
-                return THOUSAND;
-            }
-            default: {
-                throw new UnknownCashValueException("unknown cash value: " + value);
+        for(CashType cacheType : CashType.values()){
+            if (cacheType.value == value){
+                return cacheType;
             }
         }
+        throw new UnknownCashValueException("unknown cash value: " + value);
     }
-
-
 }
