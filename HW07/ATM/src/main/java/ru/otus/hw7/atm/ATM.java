@@ -10,13 +10,19 @@ import ru.otus.hw7.atm.command.pattern.GetCommand;
 import ru.otus.hw7.atm.command.pattern.PutCommand;
 import ru.otus.hw7.atm.request.Request;
 import ru.otus.hw7.atm.response.Response;
+import ru.otus.hw7.atm.state.State;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.otus.hw7.atm.command.CommandType.*;
+import static ru.otus.hw7.atm.command.CommandType.Type.BALANCE;
+import static ru.otus.hw7.atm.command.CommandType.Type.GET;
+import static ru.otus.hw7.atm.command.CommandType.Type.PUT;
+
 /**
  * ATM core class.
- * Has one public method execute, which get standard request
+ * Has one public method executeCommand, which get standard request
  * and return OK response if the command successfully complete
  * or ERROR if the command failed.
  *
@@ -27,15 +33,30 @@ import java.util.Map;
 public class ATM {
     @Getter private Map<CashType, Integer> cashMap = new HashMap<>();
     @Getter @Setter private int balance = 0;
-    private Map<CommandType.Type, Command> command = new HashMap<>();
+    private Map<Type, Command> command = new HashMap<>();
+    private State beginState;
 
-    public ATM() {
-        command.put(CommandType.Type.PUT, new PutCommand(this));
-        command.put(CommandType.Type.GET, new GetCommand(this));
-        command.put(CommandType.Type.BALANCE, new BalanceCommand(this));
+    public ATM(State state) {
+        command.put(PUT, new PutCommand(this));
+        command.put(GET, new GetCommand(this));
+        command.put(BALANCE, new BalanceCommand(this));
+        this.beginState = state;
+        setBeginState();
     }
 
-    public Response execute(Request request) {
+    public Response executeCommand(Request request) {
         return command.get(request.getCommand()).execute(request);
+    }
+
+    private void setBeginState() {
+       command.get(PUT).execute(Request.builder()
+               .cash(CashType.getCashMapForValue(beginState.getValue()))
+               .build());
+    }
+
+    public void rollBack() {
+        cashMap = new HashMap<>();
+        balance = 0;
+        setBeginState();
     }
 }

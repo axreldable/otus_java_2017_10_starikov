@@ -13,6 +13,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static ru.otus.hw7.atm.response.type.Type.ERROR;
 import static ru.otus.hw7.atm.response.type.Type.OK;
+import static ru.otus.hw7.atm.state.State.STATE_ZERO;
 
 public class ATMTest {
     private static final String ATM_BALANCE = "ATM Balance";
@@ -32,31 +33,31 @@ public class ATMTest {
 
     @Before
     public void init() {
-        atm = new ATM();
+        atm = new ATM(STATE_ZERO);
     }
 
     @Test
     public void testOkStory() {
         request = createBalanceRequest();
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkOkResponse(ATM_BALANCE, new HashMap<>(), 0);
         checkAtm(new HashMap<>(), 0);
 
         HashMap<CashType, Integer> inputMap = createCashMap(3, 2, 1);
         request = createPutRequest(inputMap);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkOkResponse(ATM_PUT_OK, inputMap, null);
         checkAtm(inputMap, getBalance(3, 2, 1));
 
         request = createGetRequest(1100);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         HashMap<CashType, Integer> returnMap = createCashMap(1, 0, 1);
         checkOkResponse(ATM_GET_OK, returnMap, null);
         HashMap<CashType, Integer> remainderMap = createCashMap(2, 2, 0);
         checkAtm(remainderMap, getBalance(2, 2, 0));
 
         request = createBalanceRequest();
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkOkResponse(ATM_BALANCE, remainderMap, getBalance(2, 2, 0));
         checkAtm(remainderMap, getBalance(2, 2, 0));
     }
@@ -65,13 +66,13 @@ public class ATMTest {
     public void testPutNotPositiveCash() {
         HashMap<CashType, Integer> inputMap = createAnyCashMap(1, 0, 1);
         request = createPutRequest(inputMap);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkBadResponse(ATM_PUT_BAD, inputMap, null);
         checkAtm(new HashMap<>(), 0);
 
         inputMap = createAnyCashMap(1, -1, 1);
         request = createPutRequest(inputMap);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkBadResponse(ATM_PUT_BAD, inputMap, null);
         checkAtm(new HashMap<>(), 0);
     }
@@ -79,7 +80,7 @@ public class ATMTest {
     @Test
     public void testBadGetNegativeValue() {
         request = createGetRequest(-1000);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkBadResponse(ATM_GET_BAD_NEGATIVE_VALUE, null, null);
     }
 
@@ -87,12 +88,12 @@ public class ATMTest {
     public void testBadGetNotEnoughMoney() {
         HashMap<CashType, Integer> inputMap = createCashMap(3, 2, 1);
         request = createPutRequest(inputMap);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkOkResponse(ATM_PUT_OK, inputMap, null);
         checkAtm(inputMap, getBalance(3, 2, 1));
 
         request = createGetRequest(getBalance(3, 2, 1) + 100);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkBadResponse(ATM_GET_BAD_NOT_ENOUGH_MONEY, null, getBalance(3, 2, 1));
         checkAtm(inputMap, getBalance(3, 2, 1));
     }
@@ -101,12 +102,12 @@ public class ATMTest {
     public void testBadGetDenomination() {
         HashMap<CashType, Integer> inputMap = createCashMap(3, 2, 1);
         request = createPutRequest(inputMap);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkOkResponse(ATM_PUT_OK, inputMap, null);
         checkAtm(inputMap, getBalance(3, 2, 1));
 
         request = createGetRequest(getBalance(3, 2, 1) - 3);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkBadResponse(ATM_GET_BAD_DENOMINATION, null, null);
         checkAtm(inputMap, getBalance(3, 2, 1));
     }
@@ -115,12 +116,12 @@ public class ATMTest {
     public void testBadGetNotEnoughCashType() {
         HashMap<CashType, Integer> inputMap = createCashMap(3, 2, 1);
         request = createPutRequest(inputMap);
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkOkResponse(ATM_PUT_OK, inputMap, null);
         checkAtm(inputMap, getBalance(3, 2, 1));
 
         request = createGetRequest(3900); // not enough 100 cash
-        response = atm.execute(request);
+        response = atm.executeCommand(request);
         checkBadResponse(ATM_GET_BAD_NOT_ENOUGH_CASH_TYPE, inputMap, null);
         checkAtm(inputMap, getBalance(3, 2, 1));
     }
@@ -193,5 +194,4 @@ public class ATMTest {
         assertEquals(cash, response.getCash());
         assertEquals(balance, response.getBalance());
     }
-
 }

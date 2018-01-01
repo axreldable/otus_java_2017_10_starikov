@@ -2,8 +2,7 @@ package ru.otus.hw7.atm.cash;
 
 import ru.otus.hw7.atm.exception.UnknownCashValueException;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -49,5 +48,15 @@ public enum CashType implements Comparable<CashType> {
             }
         }
         throw new UnknownCashValueException("unknown cash value: " + value);
+    }
+
+    public static Map<CashType,Integer> getCashMapForValue(int value) {
+        return new HashMap<CashType,Integer>() {
+            {
+                put(ONE_HUNDRED, value);
+                put(FIVE_HUNDRED, value);
+                put(THOUSAND, value);
+            }
+        };
     }
 }
