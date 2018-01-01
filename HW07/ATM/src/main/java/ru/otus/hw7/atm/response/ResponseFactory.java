@@ -8,8 +8,6 @@ import static ru.otus.hw7.atm.response.type.Type.ERROR;
 import static ru.otus.hw7.atm.response.type.Type.OK;
 
 public class ResponseFactory {
-    private static final String BED_COMMAND = "unknown command";
-
     private static final String ATM_BALANCE = "ATM Balance";
 
     private static final String ATM_PUT_BAD = "ATM can receive only positive cash";
@@ -20,13 +18,6 @@ public class ResponseFactory {
     private static final String ATM_GET_BAD_DENOMINATION = "ATM can give cash amount multiple of min value";
     private static final String ATM_GET_BAD_NOT_ENOUGH_CASH_TYPE = "ATM can't give cash - not enough cash type";
     private static final String ATM_GET_OK = "ATM successfully give money";
-
-    public static Response badCommandResponse() {
-        return Response.builder()
-                .responseType(ERROR)
-                .message(BED_COMMAND)
-                .build();
-    }
 
     public static Response okBalanceResponse(Map<CashType, Integer> cash, int balance) {
         return Response.builder()

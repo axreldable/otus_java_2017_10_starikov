@@ -10,7 +10,7 @@ import java.util.Map;
 @Builder
 @Getter
 public class Request {
-    private CommandType command;
+    private CommandType.Type command;
     private Map<CashType, Integer> cash;
     private int cashAmount;
 }

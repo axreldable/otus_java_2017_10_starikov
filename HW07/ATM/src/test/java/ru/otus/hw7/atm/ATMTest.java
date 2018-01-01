@@ -3,15 +3,14 @@ package ru.otus.hw7.atm;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.hw7.atm.cash.CashType;
+import ru.otus.hw7.atm.command.CommandType;
 import ru.otus.hw7.atm.request.Request;
 import ru.otus.hw7.atm.response.Response;
-import ru.otus.hw7.atm.command.CommandType;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static ru.otus.hw7.atm.ReflectionHelper.getPrivateField;
 import static ru.otus.hw7.atm.response.type.Type.ERROR;
 import static ru.otus.hw7.atm.response.type.Type.OK;
 
@@ -139,14 +138,14 @@ public class ATMTest {
 
     private Request createGetRequest(int cashAmount) {
         return Request.builder()
-                .command(CommandType.GET)
+                .command(CommandType.Type.GET)
                 .cashAmount(cashAmount)
                 .build();
     }
 
     private Request createPutRequest(HashMap<CashType, Integer> inputMap) {
         return Request.builder()
-                .command(CommandType.PUT)
+                .command(CommandType.Type.PUT)
                 .cash(inputMap)
                 .build();
     }
@@ -179,16 +178,13 @@ public class ATMTest {
 
     private Request createBalanceRequest() {
         return Request.builder()
-                .command(CommandType.BALANCE)
+                .command(CommandType.Type.BALANCE)
                 .build();
     }
 
     private void checkAtm(HashMap<CashType, Integer> inputMap, int balance) {
-        Map<CashType, Integer> atmCashMap = getPrivateField(atm, "cashMap");
-        assertEquals(inputMap, atmCashMap);
-
-        Integer atmBalance = getPrivateField(atm, "balance");
-        assertEquals((Integer) balance, atmBalance);
+        assertEquals(inputMap, atm.getCashMap());
+        assertEquals(balance, atm.getBalance());
     }
 
     private static void checkOkResponse(String message, Map<CashType, Integer> cash, Integer balance) {
