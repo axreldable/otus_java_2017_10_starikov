@@ -1,4 +1,4 @@
-package ru.otus.hw7.atm.state;
+package ru.otus.hw7.atm.memento.state;
 
 import static ru.otus.hw7.atm.constants.Constants.*;
 
@@ -6,7 +6,7 @@ public enum State {
     STATE_1(STATE_1_VALUE),
     STATE_2(STATE_2_VALUE),
     STATE_3(STATE_3_VALUE),
-    STATE_ZERO(0); // for existing ATMTest
+    STATE_ZERO(0); // for existing ATMTest correct working
 
     private int value;
 

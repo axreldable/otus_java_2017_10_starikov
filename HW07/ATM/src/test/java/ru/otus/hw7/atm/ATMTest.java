@@ -13,7 +13,6 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static ru.otus.hw7.atm.response.type.Type.ERROR;
 import static ru.otus.hw7.atm.response.type.Type.OK;
-import static ru.otus.hw7.atm.state.State.STATE_ZERO;
 
 public class ATMTest {
     private static final String ATM_BALANCE = "ATM Balance";
@@ -33,7 +32,7 @@ public class ATMTest {
 
     @Before
     public void init() {
-        atm = new ATM(STATE_ZERO);
+        atm = new ATM();
     }
 
     @Test

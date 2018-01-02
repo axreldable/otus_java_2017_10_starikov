@@ -5,6 +5,7 @@ import org.junit.Test;
 import ru.otus.hw7.atm.ATM;
 import ru.otus.hw7.atm.cash.CashType;
 import ru.otus.hw7.atm.command.CommandType;
+import ru.otus.hw7.atm.memento.pattern.Memento;
 import ru.otus.hw7.atm.request.Request;
 
 import java.util.ArrayList;
@@ -14,25 +15,25 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static ru.otus.hw7.atm.constants.Constants.*;
-import static ru.otus.hw7.atm.state.State.*;
+import static ru.otus.hw7.atm.memento.state.State.*;
 
 public class DepartmentTest {
     private Department department;
-    private ATM atm1;
-    private ATM atm2;
-    private ATM atm3;
+    private AtmMementoPair pair1;
+    private AtmMementoPair pair2;
+    private AtmMementoPair pair3;
 
     @Before
     public void init() {
-        atm1 = new ATM(STATE_1);
-        atm2 = new ATM(STATE_2);
-        atm3 = new ATM(STATE_3);
+        pair1 = new AtmMementoPair(new Memento(STATE_1), new ATM());
+        pair2 = new AtmMementoPair(new Memento(STATE_2), new ATM());
+        pair3 = new AtmMementoPair(new Memento(STATE_3), new ATM());
 
-        List<ATM> atms = new ArrayList<ATM>() {
+        List<AtmMementoPair> atms = new ArrayList<AtmMementoPair>() {
             {
-                add(atm1);
-                add(atm2);
-                add(atm3);
+                add(pair1);
+                add(pair2);
+                add(pair3);
             }
         };
 
@@ -55,7 +56,7 @@ public class DepartmentTest {
         int thirdAtmBalanceAfterPut = thirdAtmStartBalance + valuesSum;
         checkBalances(firstAtmBalanceAfterPut, secondAtmBalanceAfterPut, thirdAtmBalanceAfterPut);
 
-        department.rollBackAll();
+        department.restoreAll();
         checkBalances(firstAtmStartBalance, secondAtmStartBalance, thirdAtmStartBalance);
     }
 
@@ -64,9 +65,9 @@ public class DepartmentTest {
     }
 
     private void putSomeToAtms() {
-        atm1.executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
-        atm2.executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
-        atm3.executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
+        pair1.getAtm().executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
+        pair2.getAtm().executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
+        pair3.getAtm().executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
     }
 
     private Request createPutRequest(HashMap<CashType, Integer> inputMap) {

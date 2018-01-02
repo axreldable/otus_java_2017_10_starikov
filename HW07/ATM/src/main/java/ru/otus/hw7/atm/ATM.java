@@ -3,14 +3,14 @@ package ru.otus.hw7.atm;
 import lombok.Getter;
 import lombok.Setter;
 import ru.otus.hw7.atm.cash.CashType;
-import ru.otus.hw7.atm.command.CommandType;
 import ru.otus.hw7.atm.command.pattern.BalanceCommand;
 import ru.otus.hw7.atm.command.pattern.Command;
 import ru.otus.hw7.atm.command.pattern.GetCommand;
 import ru.otus.hw7.atm.command.pattern.PutCommand;
+import ru.otus.hw7.atm.memento.pattern.Memento;
 import ru.otus.hw7.atm.request.Request;
 import ru.otus.hw7.atm.response.Response;
-import ru.otus.hw7.atm.state.State;
+import ru.otus.hw7.atm.memento.state.State;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,34 +29,47 @@ import static ru.otus.hw7.atm.command.CommandType.Type.PUT;
  * Thanks for PATTERN COMMAND logic from different commands moves to different classes.
  * It's much more readable.
  * And it's much more convenient to develop the functionality of different commands.
+ *
+ * Strange logic of working with the atm state just to try MEMENTO PATTERN
+ * Better to pass the initial state in the constructor.
  */
 public class ATM {
     @Getter private Map<CashType, Integer> cashMap = new HashMap<>();
     @Getter @Setter private int balance = 0;
     private Map<Type, Command> command = new HashMap<>();
-    private State beginState;
+    private State state;
 
-    public ATM(State state) {
+    public ATM() {
         command.put(PUT, new PutCommand(this));
         command.put(GET, new GetCommand(this));
         command.put(BALANCE, new BalanceCommand(this));
-        this.beginState = state;
-        setBeginState();
     }
 
     public Response executeCommand(Request request) {
         return command.get(request.getCommand()).execute(request);
     }
 
-    private void setBeginState() {
-       command.get(PUT).execute(Request.builder()
-               .cash(CashType.getCashMapForValue(beginState.getValue()))
-               .build());
+    // just for pattern //
+    public void set(State state) {
+        this.state = state;
     }
 
-    public void rollBack() {
+    public Memento saveToMemento() {
+        return new Memento(this.state);
+    }
+
+    public void restoreFromMemento(Memento memento) {
+        this.state = memento.getSavedState();
+        setCashForState();
+    }
+
+    private void setCashForState() {
         cashMap = new HashMap<>();
         balance = 0;
-        setBeginState();
+
+        command.get(PUT).execute(Request.builder()
+                .cash(CashType.getCashMapForValue(state.getValue()))
+                .build());
     }
+    /////////////////////////////////////
 }
