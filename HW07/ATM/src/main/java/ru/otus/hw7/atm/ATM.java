@@ -8,6 +8,7 @@ import ru.otus.hw7.atm.command.pattern.Command;
 import ru.otus.hw7.atm.command.pattern.GetCommand;
 import ru.otus.hw7.atm.command.pattern.PutCommand;
 import ru.otus.hw7.atm.memento.pattern.Memento;
+import ru.otus.hw7.atm.observer.pattern.Observer;
 import ru.otus.hw7.atm.request.Request;
 import ru.otus.hw7.atm.response.Response;
 import ru.otus.hw7.atm.memento.state.State;
@@ -32,8 +33,10 @@ import static ru.otus.hw7.atm.command.CommandType.Type.PUT;
  *
  * Strange logic of working with the atm state just to try MEMENTO PATTERN
  * Better to pass the initial state in the constructor.
+ *
+ * OBSERVER PATTERN also add for working with balance
  */
-public class ATM {
+public class ATM implements Observer {
     @Getter private Map<CashType, Integer> cashMap = new HashMap<>();
     @Getter @Setter private int balance = 0;
     private Map<Type, Command> command = new HashMap<>();
@@ -49,7 +52,7 @@ public class ATM {
         return command.get(request.getCommand()).execute(request);
     }
 
-    // just for pattern //
+    // just for Memento pattern //
     public void set(State state) {
         this.state = state;
     }
@@ -72,4 +75,11 @@ public class ATM {
                 .build());
     }
     /////////////////////////////////////
+
+
+    // for observer pattern
+    @Override
+    public Response notify(Request request) {
+        return executeCommand(request);
+    }
 }
