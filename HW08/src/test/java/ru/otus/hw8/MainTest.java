@@ -12,22 +12,9 @@ public class MainTest {
     @Test
     public void test() {
         JsonEditorOnlineObject object = new JsonEditorOnlineObject();
-        String expectedString = "{\n" +
-                "  \"array\": [\n" +
-                "    1,\n" +
-                "    2,\n" +
-                "    3\n" +
-                "  ],\n" +
-                "  \"b\": true,\n" +
-                "  \"number\": 123,\n" +
-                "  \"inner\": {\n" +
-                "    \"a\": \"b\",\n" +
-                "    \"c\": \"d\",\n" +
-                "    \"e\": \"f\"\n" +
-                "  },\n" +
-                "  \"string\": \"Hello World\"\n" +
-                "}\n";
+        String expectedString = "{\"array\":[1,2,3],\"b\":true,\"number\":123,\"inner\":{\"a\":\"b\",\"c\":\"d\",\"e\":\"f\"},\"string\":\"Hello World\"}";
         String resultString = new JsonObjectWriter().toJsonString(object);
+//        String resultString = new Gson().toJson(object);
         assertEquals(expectedString, resultString);
 
         JsonEditorOnlineObject testObject = new Gson().fromJson(resultString, JsonEditorOnlineObject.class);

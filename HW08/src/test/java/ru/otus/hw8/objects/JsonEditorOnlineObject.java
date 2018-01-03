@@ -1,5 +1,8 @@
 package ru.otus.hw8.objects;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class JsonEditorOnlineObject {
     private int[] array = {1, 2, 3};
     public boolean b = true;
