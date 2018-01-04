@@ -46,14 +46,9 @@ public class JsonObjectCreator {
 
     private boolean isPrimitive(Object object) {
         return object == null ||
+                object instanceof Number ||
                 object instanceof Boolean ||
-                object instanceof Integer ||
-                object instanceof Float ||
-                object instanceof Double ||
-                object instanceof Byte ||
-                object instanceof Short ||
                 object instanceof Character ||
-                object instanceof Long ||
                 object instanceof String;
     }
 
