@@ -40,3 +40,9 @@ ATM Department. Написать приложение ATM Department:
 2. Departmant может собирать сумму остатков со всех ATM
 3. Department может инициировать событие – восстановить состояние всех ATM до начального.
 (начальные состояния у разных ATM могут быть разными)
+
+### ДЗ_8
+JSON object writer
+
+Напишите свой json object writer (object to json string) аналогичный gson на основе javax.json или simple-json и Reflection.
+Поддержите массивы объектов и примитивных типов, и коллекции из стандартный библиотерки.
