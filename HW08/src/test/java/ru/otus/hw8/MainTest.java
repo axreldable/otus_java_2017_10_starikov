@@ -3,21 +3,26 @@ package ru.otus.hw8;
 import com.google.gson.Gson;
 import org.junit.Test;
 import ru.otus.hw8.json.writer.JsonObjectWriter;
-import ru.otus.hw8.objects.JsonEditorOnlineObject;
+import ru.otus.hw8.objects.complex.ComplexObject;
+import ru.otus.hw8.objects.simple.SimpleObject;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class MainTest {
 
     @Test
-    public void test() {
-        JsonEditorOnlineObject object = new JsonEditorOnlineObject();
-        String expectedString = "{\"array\":[1,2,3],\"b\":true,\"number\":123,\"inner\":{\"a\":\"b\",\"c\":\"d\",\"e\":\"f\"},\"string\":\"Hello World\"}";
-        String resultString = new JsonObjectWriter().toJsonString(object);
-//        String resultString = new Gson().toJson(object);
-        assertEquals(expectedString, resultString);
+    public void testComplexObject() {
+        testObject(new ComplexObject());
+    }
 
-        JsonEditorOnlineObject testObject = new Gson().fromJson(resultString, JsonEditorOnlineObject.class);
+    @Test
+    public void testSimpleObject() {
+        testObject(new SimpleObject());
+    }
+
+    private <T> void testObject(T object) {
+        String resultString = new JsonObjectWriter().toJsonString(object);
+        T testObject = new Gson().fromJson(resultString, (Class<T>) object.getClass());
         assertEquals(testObject, object);
     }
 }

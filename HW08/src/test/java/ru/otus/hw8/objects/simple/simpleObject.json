@@ -1,0 +1,18 @@
+{ "aByte1": 1,
+  "aByte2": 2,
+  "aShort1": 1,
+  "aShort2": 2,
+  "aChar1": "1",
+  "aChar2": "2",
+  "anInt1": 1,
+  "anInt2": 2,
+  "aLong1": 1,
+  "aLong2": 2,
+  "aFloat1": 1.0,
+  "aFloat2": 2.0,
+  "aDouble1": 1.0,
+  "aDouble2": 2.0,
+  "string": "Hello",
+  "aBoolean1": false,
+  "aBoolean2": true
+}
