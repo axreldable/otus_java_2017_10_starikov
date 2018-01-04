@@ -17,7 +17,22 @@ public class JsonObjectCreator {
         if (isArray(object)) {
             return createArray(object);
         }
+        if (isIterable(object)) {
+            return createArrayFromIterable((Iterable) object);
+        }
         return createJsonObject(object);
+    }
+
+    private Object createArrayFromIterable(Iterable iterable) {
+        JSONArray array = new JSONArray();
+        for (Object object : iterable) {
+            array.add(create(object));
+        }
+        return array;
+    }
+
+    private boolean isIterable(Object object) {
+        return object instanceof Iterable;
     }
 
     private Object createJsonObject(Object object) {
