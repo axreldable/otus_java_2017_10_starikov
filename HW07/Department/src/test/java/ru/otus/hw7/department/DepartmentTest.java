@@ -41,9 +41,9 @@ public class DepartmentTest {
     @Test
     public void departmentTest() {
         int valuesSum = CashType.getCashValues().stream().mapToInt(Integer::intValue).sum();
-        int firstAtmStartBalance = STATE_1_VALUE * valuesSum;
-        int secondAtmStartBalance = STATE_2_VALUE * valuesSum;
-        int thirdAtmStartBalance = STATE_3_VALUE * valuesSum;
+        int firstAtmStartBalance = VALUE_5 * valuesSum;
+        int secondAtmStartBalance = VALUE_30 * valuesSum;
+        int thirdAtmStartBalance = VALUE_150 * valuesSum;
 
         checkBalances(firstAtmStartBalance, secondAtmStartBalance, thirdAtmStartBalance);
 
