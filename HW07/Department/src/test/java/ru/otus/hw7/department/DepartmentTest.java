@@ -4,9 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.otus.hw7.atm.ATM;
 import ru.otus.hw7.atm.cash.CashType;
-import ru.otus.hw7.atm.command.CommandType;
 import ru.otus.hw7.atm.memento.pattern.Memento;
-import ru.otus.hw7.atm.request.Request;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,16 +63,9 @@ public class DepartmentTest {
     }
 
     private void putSomeToAtms() {
-        pair1.getAtm().executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
-        pair2.getAtm().executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
-        pair3.getAtm().executeCommand(createPutRequest(createAnyCashMap(1, 1, 1)));
-    }
-
-    private Request createPutRequest(HashMap<CashType, Integer> inputMap) {
-        return Request.builder()
-                .command(CommandType.Type.PUT)
-                .cash(inputMap)
-                .build();
+        pair1.getAtm().put(createAnyCashMap(1, 1, 1));
+        pair2.getAtm().put(createAnyCashMap(1, 1, 1));
+        pair3.getAtm().put(createAnyCashMap(1, 1, 1));
     }
 
     private HashMap<CashType,Integer> createAnyCashMap(int thousands, int fiveHundreds, int oneHundreds) {
