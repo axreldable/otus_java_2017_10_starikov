@@ -4,22 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.otus.hw7.atm.cash.CashType;
 import ru.otus.hw7.atm.command.pattern.BalanceCommand;
-import ru.otus.hw7.atm.command.pattern.Command;
 import ru.otus.hw7.atm.command.pattern.GetCommand;
 import ru.otus.hw7.atm.command.pattern.PutCommand;
 import ru.otus.hw7.atm.memento.pattern.Memento;
+import ru.otus.hw7.atm.memento.state.State;
 import ru.otus.hw7.atm.observer.pattern.Observer;
 import ru.otus.hw7.atm.request.Request;
+import ru.otus.hw7.atm.request.RequestFactory;
 import ru.otus.hw7.atm.response.Response;
-import ru.otus.hw7.atm.memento.state.State;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static ru.otus.hw7.atm.command.CommandType.*;
-import static ru.otus.hw7.atm.command.CommandType.Type.BALANCE;
-import static ru.otus.hw7.atm.command.CommandType.Type.GET;
-import static ru.otus.hw7.atm.command.CommandType.Type.PUT;
 
 /**
  * ATM core class.
@@ -39,17 +34,25 @@ import static ru.otus.hw7.atm.command.CommandType.Type.PUT;
 public class ATM implements Observer {
     @Getter private Map<CashType, Integer> cashMap = new HashMap<>();
     @Getter @Setter private int balance = 0;
-    private Map<Type, Command> command = new HashMap<>();
     private State state;
 
     public ATM() {
-        command.put(PUT, new PutCommand(this));
-        command.put(GET, new GetCommand(this));
-        command.put(BALANCE, new BalanceCommand(this));
     }
 
-    public Response executeCommand(Request request) {
-        return command.get(request.getCommand()).execute(request);
+    public Response withdraw(int value) {
+        return new GetCommand(this).execute(RequestFactory.createGetRequest(value));
+    }
+
+    public Response put(CashType type, int value) {
+        return new PutCommand(this).execute(RequestFactory.createPutRequest(type, value));
+    }
+
+    public Response put(Map<CashType, Integer> cashMap) {
+        return new PutCommand(this).execute(RequestFactory.createPutRequest(cashMap));
+    }
+
+    public Response balance() {
+        return new BalanceCommand(this).execute(RequestFactory.createBalanceRequest());
     }
 
     // just for Memento pattern //
@@ -70,7 +73,7 @@ public class ATM implements Observer {
         cashMap = new HashMap<>();
         balance = 0;
 
-        command.get(PUT).execute(Request.builder()
+        new PutCommand(this).execute(Request.builder()
                 .cash(CashType.getCashMapForValue(state.getValue()))
                 .build());
     }
@@ -79,7 +82,7 @@ public class ATM implements Observer {
 
     // for observer pattern
     @Override
-    public Response notify(Request request) {
-        return executeCommand(request);
+    public Response notifyGetBalance() {
+        return balance();
     }
 }
