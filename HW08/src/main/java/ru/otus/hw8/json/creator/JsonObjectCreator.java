@@ -1,11 +1,13 @@
 package ru.otus.hw8.json.creator;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import ru.otus.hw8.json.my.simple.json.MyJsonArray;
+import ru.otus.hw8.json.my.simple.json.MyJsonObject;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.logging.Logger;
+
+import static ru.otus.hw8.json.creator.checker.Checker.*;
 
 public class JsonObjectCreator {
     private final static Logger log = Logger.getLogger(JsonObjectCreator.class.getName());
@@ -23,20 +25,18 @@ public class JsonObjectCreator {
         return createJsonObject(object);
     }
 
-    private Object createArrayFromIterable(Iterable iterable) {
-        JSONArray array = new JSONArray();
+    @SuppressWarnings("unchecked")
+    private MyJsonArray createArrayFromIterable(Iterable iterable) {
+        MyJsonArray array = new MyJsonArray();
         for (Object object : iterable) {
             array.add(create(object));
         }
         return array;
     }
 
-    private boolean isIterable(Object object) {
-        return object instanceof Iterable;
-    }
-
-    private Object createJsonObject(Object object) {
-        JSONObject jsonObject = new JSONObject();
+    @SuppressWarnings("unchecked")
+    private MyJsonObject createJsonObject(Object object) {
+        MyJsonObject jsonObject = new MyJsonObject();
         for (Field field: object.getClass().getDeclaredFields()) {
             boolean accessible = field.isAccessible();
             field.setAccessible(true);
@@ -51,23 +51,14 @@ public class JsonObjectCreator {
         return jsonObject;
     }
 
-    private JSONArray createArray(Object object) {
-        JSONArray jsonArray = new JSONArray();
+    @SuppressWarnings("unchecked")
+    private MyJsonArray createArray(Object object) {
+        MyJsonArray jsonArray = new MyJsonArray();
         for (int i = 0; i < Array.getLength(object); i++) {
             jsonArray.add(create(Array.get(object, i)));
         }
         return jsonArray;
     }
 
-    private boolean isPrimitive(Object object) {
-        return object == null ||
-                object instanceof Number ||
-                object instanceof Boolean ||
-                object instanceof Character ||
-                object instanceof String;
-    }
 
-    private boolean isArray(Object object) {
-        return object.getClass().isArray();
-    }
 }

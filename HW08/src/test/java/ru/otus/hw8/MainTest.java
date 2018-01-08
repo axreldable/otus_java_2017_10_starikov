@@ -22,6 +22,8 @@ public class MainTest {
 
     private <T> void testObject(T object) {
         String resultString = new JsonObjectWriter().toJsonString(object);
+//        System.out.println("my writer: + \n" + resultString);
+//        System.out.println("Gson writer: + \n" + new Gson().toJson(object));
         T testObject = new Gson().fromJson(resultString, (Class<T>) object.getClass());
         assertEquals(testObject, object);
     }

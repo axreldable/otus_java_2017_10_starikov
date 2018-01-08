@@ -1,7 +1,7 @@
 package ru.otus.hw8.json.writer;
 
-import org.json.simple.JSONObject;
 import ru.otus.hw8.json.creator.JsonObjectCreator;
+import ru.otus.hw8.json.my.simple.json.MyJsonAware;
 
 /**
  * JSON serializer.
@@ -11,6 +11,6 @@ import ru.otus.hw8.json.creator.JsonObjectCreator;
 public class JsonObjectWriter {
     public String toJsonString(Object object) {
         Object jsonObject = new JsonObjectCreator().create(object);
-        return ((JSONObject) jsonObject).toJSONString();
+        return ((MyJsonAware) jsonObject).toJsonString();
     }
 }
