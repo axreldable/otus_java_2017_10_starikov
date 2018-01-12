@@ -3,8 +3,8 @@ package ru.otus.hw9.executor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.hw9.data.UserDataSet;
 import ru.otus.hw9.executor.connection.MySqlConnectionHelper;
+import ru.otus.hw9.executor.data.set.UserDataSet;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
