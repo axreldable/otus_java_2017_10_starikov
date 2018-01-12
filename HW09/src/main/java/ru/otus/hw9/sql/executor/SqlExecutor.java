@@ -1,9 +1,10 @@
 package ru.otus.hw9.sql.executor;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import ru.otus.hw9.data.DataSet;
+
+import java.sql.*;
+
+import static ru.otus.hw9.data.reflection.DataSetWorker.createDataSet;
 
 /**
  * Class for execute sql statements
@@ -15,28 +16,24 @@ public class SqlExecutor {
         this.connection = connection;
     }
 
-    /**
-     * Execute select query
-     * @param query select query
-     * @return query result set
-     * @throws SQLException
-     */
-    public ResultSet select(String query) throws SQLException {
+    public <T extends DataSet> T select(String query, long id, Class<T> clazz) throws Exception {
         try(Statement statement = connection.createStatement()) {
-            return statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery(query);
+            T dataSet = createDataSet(clazz, resultSet);
+            if (dataSet != null) {
+                dataSet.setId(id);
+            }
+            return dataSet;
         }
     }
 
-    /**
-     * Execute insert statement
-     * @param query insert statement
-     * @throws SQLException
-     */
-    public void insert(String query) throws SQLException {
-        try(Statement statement = connection.createStatement()) {
-            statement.execute(query);
+    public long insert(String query) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            statement.execute();
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            generatedKeys.next();
+            return generatedKeys.getLong(1);
         }
-        connection.commit();
     }
 
     @Override

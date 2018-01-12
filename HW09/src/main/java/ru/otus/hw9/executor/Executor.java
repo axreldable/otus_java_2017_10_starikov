@@ -4,6 +4,12 @@ import ru.otus.hw9.data.DataSet;
 import ru.otus.hw9.sql.executor.SqlExecutor;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import static ru.otus.hw9.data.reflection.DataSetWorker.getColumnValues;
+import static ru.otus.hw9.data.reflection.DataSetWorker.getTableName;
+import static ru.otus.hw9.sql.query.SqlQueryCreator.createInsert;
+import static ru.otus.hw9.sql.query.SqlQueryCreator.createSelect;
 
 /**
  * Executor work with sql connection and save or load DataSet heirs to or from database
@@ -22,8 +28,9 @@ public class Executor {
      * Get the heir from DataSet and save it to database
      * @param dataSetObject the heir from DataSet
      */
-    public <T extends DataSet> void save(T dataSetObject) {
-
+    public <T extends DataSet> void save(T dataSetObject) throws SQLException, IllegalAccessException {
+        long id = sqlExecutor.insert(createInsert(getTableName(dataSetObject), getColumnValues(dataSetObject)));
+        dataSetObject.setId(id);
     }
 
     /**
@@ -32,7 +39,7 @@ public class Executor {
      * @param clazz object class
      * @return the heir from DataSet
      */
-    public <T extends DataSet> T load(long id, Class<T> clazz) {
-        return null;
+    public <T extends DataSet> T load(long id, Class<T> clazz) throws Exception {
+        return sqlExecutor.select(createSelect(getTableName(clazz), null, id), id, clazz);
     }
 }

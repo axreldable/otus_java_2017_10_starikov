@@ -12,4 +12,7 @@ public class UserDataSet extends DataSet {
         this.name = name;
         this.age = age;
     }
+
+    public UserDataSet() {
+    }
 }

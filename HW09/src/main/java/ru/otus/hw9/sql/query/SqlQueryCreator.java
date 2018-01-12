@@ -15,11 +15,11 @@ public class SqlQueryCreator {
     private static final char COMMA = ',';
     private static final String EMPTY_STRING = "";
 
-    public String select(String tableName, List<String> values) {
-        return "select " + joinValues(values, COMMA, STAR) + " from " + tableName;
+    public static String createSelect(String tableName, List<String> values, long id) {
+        return "select " + joinValues(values, COMMA, STAR) + " from " + tableName + " where id = " + id;
     }
 
-    public String insert(String tableName, Map<String, Object> columnValueMap) {
+    public static String createInsert(String tableName, Map<String, Object> columnValueMap) {
         String columnString = EMPTY_STRING;
         String valuesString = EMPTY_STRING;
 
@@ -33,16 +33,16 @@ public class SqlQueryCreator {
         return "insert into " + tableName + "(" + columnString + ") values(" + valuesString + ")";
     }
 
-    private List getStringArray(List<ColumnValuePair> pairs, Function<ColumnValuePair, String> f) {
+    private static List getStringArray(List<ColumnValuePair> pairs, Function<ColumnValuePair, String> f) {
         return pairs.stream().map(f).collect(Collectors.toList());
     }
 
-    private String joinValues(List list, char delimiter, String defaultValue) {
+    private static String joinValues(List list, char delimiter, String defaultValue) {
         if (list == null) return defaultValue;
         return StringUtils.join(list, delimiter);
     }
 
-    private List<ColumnValuePair> getColumnValuePairs(Map<String, Object> columnValueMap) {
+    private static List<ColumnValuePair> getColumnValuePairs(Map<String, Object> columnValueMap) {
         if (columnValueMap == null) return null;
         return columnValueMap.keySet()
                 .stream()

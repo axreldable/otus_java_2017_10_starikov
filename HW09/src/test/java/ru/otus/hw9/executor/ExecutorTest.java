@@ -37,7 +37,7 @@ public class ExecutorTest {
     }
 
     @Test
-    public void test() throws SQLException {
+    public void test() throws Exception {
         UserDataSet userTo = new UserDataSet("name1", 1);
         assertNull(userTo.getId());
 
@@ -48,6 +48,12 @@ public class ExecutorTest {
 
         UserDataSet userFrom = executor.load(userTo.getId(), UserDataSet.class);
         assertEquals(userTo, userFrom);
+    }
+
+    @Test
+    public void nullTest() throws Exception {
+        UserDataSet userFrom = executor.load(-1L, UserDataSet.class);
+        assertNull(userFrom);
     }
 
     private int getUserAmount() throws SQLException {
