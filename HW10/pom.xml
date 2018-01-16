@@ -13,6 +13,9 @@
         <module>myOrm</module>
         <module>hibernate</module>
         <module>test</module>
+        <module>common</module>
+        <module>common</module>
+        <module>common</module>
     </modules>
 
 
