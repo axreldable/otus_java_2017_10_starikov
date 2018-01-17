@@ -23,6 +23,9 @@ public class SqlQueryCreatorTest {
 
         select = createSelect(TABLE, Arrays.asList("column1", "column2"), 1L);
         assertEquals("select column1,column2 from TABLE where id = 1", select);
+
+        select = createSelect(TABLE);
+        assertEquals("select * from TABLE", select);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package ru.otus.hw10.executor.connection;
+package ru.otus.hw10.service.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

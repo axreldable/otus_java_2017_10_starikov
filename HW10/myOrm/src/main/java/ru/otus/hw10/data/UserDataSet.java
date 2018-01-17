@@ -1,7 +1,6 @@
-package ru.otus.hw10.executor.data.set;
+package ru.otus.hw10.data;
 
 import lombok.EqualsAndHashCode;
-import ru.otus.hw10.data.DataSet;
 
 @EqualsAndHashCode(callSuper = true)
 public class UserDataSet extends DataSet {

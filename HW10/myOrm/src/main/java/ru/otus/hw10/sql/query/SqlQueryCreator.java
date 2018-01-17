@@ -19,6 +19,10 @@ public class SqlQueryCreator {
         return "select " + joinValues(values, COMMA, STAR) + " from " + tableName + " where id = " + id;
     }
 
+    public static String createSelect(String tableName) {
+        return "select " + STAR + " from " + tableName;
+    }
+
     public static String createInsert(String tableName, Map<String, Object> columnValueMap) {
         String columnString = EMPTY_STRING;
         String valuesString = EMPTY_STRING;

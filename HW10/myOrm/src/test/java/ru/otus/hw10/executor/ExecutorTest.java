@@ -3,8 +3,8 @@ package ru.otus.hw10.executor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.hw10.executor.connection.MySqlConnectionHelper;
-import ru.otus.hw10.executor.data.set.UserDataSet;
+import ru.otus.hw10.service.connection.MySqlConnectionHelper;
+import ru.otus.hw10.data.UserDataSet;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -51,7 +51,7 @@ public class ExecutorTest {
     }
 
     @Test
-    public void nullTest() throws Exception {
+    public void nullTest() {
         UserDataSet userFrom = executor.load(-1L, UserDataSet.class);
         assertNull(userFrom);
     }

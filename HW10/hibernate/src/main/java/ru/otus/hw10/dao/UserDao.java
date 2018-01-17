@@ -30,13 +30,4 @@ public class UserDao {
         criteria.from(UserDataSet.class);
         return session.createQuery(criteria).list();
     }
-
-    public UserDataSet readByName(String name) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<UserDataSet> criteria = builder.createQuery(UserDataSet.class);
-        Root<UserDataSet> from = criteria.from(UserDataSet.class);
-        criteria.where(builder.equal(from.get("name"), name));
-        Query<UserDataSet> query = session.createQuery(criteria);
-        return query.uniqueResult();
-    }
 }

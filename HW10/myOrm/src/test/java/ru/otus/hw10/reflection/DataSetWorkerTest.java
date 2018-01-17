@@ -2,7 +2,7 @@ package ru.otus.hw10.reflection;
 
 import org.junit.Test;
 import ru.otus.hw10.data.DataSet;
-import ru.otus.hw10.executor.data.set.UserDataSet;
+import ru.otus.hw10.data.UserDataSet;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -3,6 +3,8 @@ package ru.otus.hw10.sql.executor;
 import ru.otus.hw10.data.DataSet;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static ru.otus.hw10.data.reflection.DataSetWorker.createDataSet;
 
@@ -36,9 +38,18 @@ public class SqlExecutor {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
+    public void close() throws Throwable {
         connection.close();
+    }
+
+    public <T extends DataSet> List<T> select(String query, Class<T> clazz) throws Exception {
+        List<T> result = new ArrayList<>();
+        try(Statement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                result.add(createDataSet(clazz, resultSet));
+            }
+        }
+        return result;
     }
 }
