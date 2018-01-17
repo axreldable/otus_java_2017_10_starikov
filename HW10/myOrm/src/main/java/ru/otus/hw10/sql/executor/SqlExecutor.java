@@ -46,8 +46,14 @@ public class SqlExecutor {
         List<T> result = new ArrayList<>();
         try(Statement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                result.add(createDataSet(clazz, resultSet));
+            while (true) {
+                T dataSet = createDataSet(clazz, resultSet);
+                if (dataSet != null) {
+                    dataSet.setId(resultSet.getLong("id"));
+                    result.add(dataSet);
+                } else {
+                    break;
+                }
             }
         }
         return result;
