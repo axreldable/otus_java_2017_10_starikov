@@ -6,10 +6,9 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import ru.otus.hw10.DBService;
 import ru.otus.hw10.data.AddressDataSet;
 import ru.otus.hw10.data.UserDataSet;
-import ru.otus.hw10.service.dao.UserDao;
+import ru.otus.hw10.dao.UserDao;
 
 import java.util.List;
 import java.util.function.Function;

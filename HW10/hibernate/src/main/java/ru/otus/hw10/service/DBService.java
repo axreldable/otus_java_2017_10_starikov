@@ -1,4 +1,4 @@
-package ru.otus.hw10;
+package ru.otus.hw10.service;
 
 import ru.otus.hw10.data.UserDataSet;
 

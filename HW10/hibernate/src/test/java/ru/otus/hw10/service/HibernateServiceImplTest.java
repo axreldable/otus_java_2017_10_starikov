@@ -1,15 +1,13 @@
-package ru.otus.sevice;
+package ru.otus.hw10.service;
 
 import org.junit.After;
 import org.junit.Test;
-import ru.otus.hw10.DBService;
 import ru.otus.hw10.data.AddressDataSet;
 import ru.otus.hw10.data.UserDataSet;
-import ru.otus.hw10.service.HibernateServiceImpl;
 
 import static org.junit.Assert.*;
 
-public class ServiceTest {
+public class HibernateServiceImplTest {
     private DBService service;
 
     @After
@@ -41,4 +39,5 @@ public class ServiceTest {
     private int getUserAmount() {
         return service.getAmount();
     }
+
 }

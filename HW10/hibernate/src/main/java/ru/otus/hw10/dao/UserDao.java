@@ -1,4 +1,4 @@
-package ru.otus.hw10.service.dao;
+package ru.otus.hw10.dao;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
