@@ -3,16 +3,14 @@ package ru.otus.hw10.executor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.otus.hw10.data.UserDataSet;
 import ru.otus.hw10.executor.connection.MySqlConnectionHelper;
-import ru.otus.hw10.executor.data.set.UserDataSet;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 
 public class ExecutorTest {
     private static final String DB_NAME = "otus";
@@ -37,29 +35,8 @@ public class ExecutorTest {
     }
 
     @Test
-    public void test() throws Exception {
-        UserDataSet userTo = new UserDataSet("name1", 1);
-        assertNull(userTo.getId());
-
-        int startUserAmount = getUserAmount();
-        executor.save(userTo);
-        assertNotNull(userTo.getId());
-        assertEquals(startUserAmount + 1, getUserAmount());
-
-        UserDataSet userFrom = executor.load(userTo.getId(), UserDataSet.class);
-        assertEquals(userTo, userFrom);
-    }
-
-    @Test
     public void nullTest() throws Exception {
         UserDataSet userFrom = executor.load(-1L, UserDataSet.class);
         assertNull(userFrom);
-    }
-
-    private int getUserAmount() throws SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT COUNT(*) as total FROM user");
-        rs.next();
-        return rs.getInt("total");
     }
 }

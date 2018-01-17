@@ -1,11 +1,17 @@
 package ru.otus.hw10;
 
-import ru.otus.hw10.data.DataSet;
+import ru.otus.hw10.data.UserDataSet;
+
+import java.util.List;
 
 public interface DBService {
-    <T extends DataSet> void save(T dataSetObject);
+    void save(UserDataSet dataSet);
 
-    <T extends DataSet> T load(long id, Class<T> clazz);
+    UserDataSet load(long id);
 
     void shutdown();
+
+    List<UserDataSet> readAll();
+
+    int getAmount();
 }
