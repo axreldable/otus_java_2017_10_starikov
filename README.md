@@ -82,3 +82,9 @@ private String number;
 Добавить соответствущие датасеты и DAO. 
 
 4.** Поддержать работу из пункта (3) в myORM
+
+### ДЗ_11
+my cache engine
+
+- Напишите свой cache engine с soft references.
+- Добавьте кэширование в DBService из заданий myORM или Hibernate ORM 
