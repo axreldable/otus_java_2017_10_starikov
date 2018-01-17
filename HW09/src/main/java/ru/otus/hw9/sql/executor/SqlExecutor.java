@@ -17,7 +17,7 @@ public class SqlExecutor {
     }
 
     public <T extends DataSet> T select(String query, long id, Class<T> clazz) throws Exception {
-        try(Statement statement = connection.createStatement()) {
+        try(Statement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery(query);
             T dataSet = createDataSet(clazz, resultSet);
             if (dataSet != null) {

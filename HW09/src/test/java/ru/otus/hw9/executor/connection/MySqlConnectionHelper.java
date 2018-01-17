@@ -25,7 +25,7 @@ public class MySqlConnectionHelper {
     }
 
     private String getConnectionUrl() {
-        return "jdbc:mysql://" + getHost() + ":" + getPort() + "/" + getDbName();
+        return "jdbc:mysql://" + getHost() + ":" + getPort() + "/" + getDbName() + "?serverTimezone=UTC";
     }
 
     private String getHost() {
