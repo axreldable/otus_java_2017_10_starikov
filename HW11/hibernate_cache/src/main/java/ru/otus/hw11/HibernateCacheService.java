@@ -4,6 +4,8 @@ import lombok.Getter;
 import ru.otus.hw11.data.UserDataSet;
 import ru.otus.hw11.service.HibernateServiceImpl;
 
+import java.util.List;
+
 import static ru.otus.hw11.Constants.CACHE_LIFE_TIME;
 import static ru.otus.hw11.Constants.CACHE_SIZE;
 
@@ -27,5 +29,14 @@ public class HibernateCacheService extends HibernateServiceImpl {
     public void save(UserDataSet dataSet) {
         super.save(dataSet);
         cache.put(new CacheElem<>(dataSet.getId(), dataSet));
+    }
+
+    @Override
+    public List<UserDataSet> readAll() {
+        List<UserDataSet> allUsers = super.readAll();
+        if (allUsers != null) {
+            allUsers.forEach(user -> new CacheElem<>(user.getId(), user));
+        }
+        return allUsers;
     }
 }
