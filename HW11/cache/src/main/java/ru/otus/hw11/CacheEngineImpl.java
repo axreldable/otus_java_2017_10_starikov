@@ -1,5 +1,6 @@
 package ru.otus.hw11;
 
+import java.lang.ref.SoftReference;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Function;
@@ -32,14 +33,16 @@ public class CacheEngineImpl<K, V> extends EternalCacheEngine<K, V> {
 
     @Override
     public CacheElem<K, V> get(K key) {
-        CacheElem<K, V> element = elements.get(key);
-        if (element != null) {
-            hit++;
-            element.setAccessed();
-        } else {
-            miss++;
+        if (elements.containsKey(key)) {
+            CacheElem<K, V> elem = elements.get(key).get();
+            if (elem != null) {
+                hit++;
+                elem.setAccessed();
+                return elem;
+            }
         }
-        return element;
+        miss++;
+        return null;
     }
 
     @Override
@@ -51,10 +54,16 @@ public class CacheEngineImpl<K, V> extends EternalCacheEngine<K, V> {
         return new TimerTask() {
             @Override
             public void run() {
-                CacheElem<K, V> element = elements.get(key);
-                if (element == null || isT1BeforeT2(timeFunction.apply(element), System.currentTimeMillis())) {
+                SoftReference<CacheElem<K, V>> sr = elements.get(key);
+                if (sr == null) {
                     elements.remove(key);
                     this.cancel();
+                } else {
+                    CacheElem<K, V> elem = sr.get();
+                    if (elem == null || isT1BeforeT2(timeFunction.apply(elem), System.currentTimeMillis())) {
+                        elements.remove(key);
+                        this.cancel();
+                    }
                 }
             }
         };

@@ -1,11 +1,12 @@
 package ru.otus.hw11;
 
+import java.lang.ref.SoftReference;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class EternalCacheEngine<K, V> implements CacheEngine<K, V> {
     private final int maxElements;
-    final Map<K, CacheElem<K, V>> elements = new LinkedHashMap<>();
+    final Map<K, SoftReference<CacheElem<K, V>>> elements = new LinkedHashMap<>();
     int hit = 0;
     int miss = 0;
 
@@ -18,7 +19,7 @@ public class EternalCacheEngine<K, V> implements CacheEngine<K, V> {
             removeFirstElem();
 
         }
-        elements.put(element.getKey(), element);
+        elements.put(element.getKey(), new SoftReference<>(element));
     }
 
     private void removeFirstElem() {
@@ -27,13 +28,15 @@ public class EternalCacheEngine<K, V> implements CacheEngine<K, V> {
     }
 
     public CacheElem<K, V> get(K key) {
-        CacheElem<K, V> element = elements.get(key);
-        if (element != null) {
-            hit++;
-        } else {
-            miss++;
+        if (elements.containsKey(key)) {
+            CacheElem<K, V> elem = elements.get(key).get();
+            if (elem != null) {
+                hit++;
+                return elem;
+            }
         }
-        return element;
+        miss++;
+        return null;
     }
 
     public int getHitCount() {
