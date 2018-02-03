@@ -35,7 +35,7 @@ public class HibernateCacheService extends HibernateServiceImpl {
     public List<UserDataSet> readAll() {
         List<UserDataSet> allUsers = super.readAll();
         if (allUsers != null) {
-            allUsers.forEach(user -> new CacheElem<>(user.getId(), user));
+            allUsers.forEach(user -> cache.put(new CacheElem<>(user.getId(), user)));
         }
         return allUsers;
     }

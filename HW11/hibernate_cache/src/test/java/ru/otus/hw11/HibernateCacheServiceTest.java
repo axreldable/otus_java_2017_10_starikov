@@ -45,7 +45,7 @@ public class HibernateCacheServiceTest {
         assertEquals(userTo, cacheService.getCache().get(userTo.getId()).getValue());
         assertEquals(userFrom, cacheService.getCache().get(userFrom.getId()).getValue());
 
-        Thread.sleep(CACHE_LIFE_TIME); // 30 sec...
+        Thread.sleep(CACHE_LIFE_TIME + 1000); // 30 sec...
 
         assertNull(cacheService.getCache().get(userTo.getId()));
         assertNull(cacheService.getCache().get(userFrom.getId()));
