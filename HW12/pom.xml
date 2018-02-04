@@ -13,13 +13,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <jetty.version>9.4.8.v20171121</jetty.version>
     </properties>
 
     <modules>
         <module>cache</module>
         <module>hibernate</module>
         <module>hibernate_cache</module>
+        <module>web_server</module>
     </modules>
 
     <dependencies>
