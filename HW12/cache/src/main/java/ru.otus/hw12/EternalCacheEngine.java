@@ -48,5 +48,10 @@ public class EternalCacheEngine<K, V> implements CacheEngine<K, V> {
     }
 
     @Override
+    public int getSize() {
+        return maxElements;
+    }
+
+    @Override
     public void dispose() {}
 }

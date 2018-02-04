@@ -9,5 +9,7 @@ public interface CacheEngine<K, V> {
 
     int getMissCount();
 
+    int getSize();
+
     void dispose();
 }
