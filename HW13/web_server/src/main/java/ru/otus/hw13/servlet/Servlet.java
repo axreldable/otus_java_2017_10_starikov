@@ -1,4 +1,4 @@
-package ru.orus.hw12.servlet;
+package ru.otus.hw13.servlet;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
