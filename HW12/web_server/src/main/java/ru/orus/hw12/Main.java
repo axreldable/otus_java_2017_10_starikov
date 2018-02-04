@@ -53,18 +53,15 @@ public class Main {
     private static CacheEngine<Long,UserDataSet> startDbServiceWork() {
         HibernateCacheService dbService = new HibernateCacheService();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        dbService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
-                        dbService.load(1);
-                        Thread.sleep(100);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        new Thread(() -> {
+            try {
+                while (true) {
+                    dbService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
+                    dbService.load(1);
+                    Thread.sleep(100);
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }).start();
 
