@@ -30,10 +30,11 @@ public class LoginServlet extends Servlet {
 
 
         if (LOGIN_PASSWORD.equals(login) && LOGIN_PASSWORD.equals(password) ) {
+            User.isLogin = true;
             response.sendRedirect("http://localhost:" + PORT + "/" + CACHE);
         }
         else {
-
+            User.isLogin = false;
             response.getWriter().println(HtmlCreator.instance().create(LOGIN_PAGE, setMessageWrong("Wrong login or password!")));
             setOK(response);
         }
