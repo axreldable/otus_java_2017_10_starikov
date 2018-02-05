@@ -7,7 +7,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import ru.orus.hw12.servlet.CacheServlet;
 import ru.orus.hw12.servlet.LoginServlet;
-import ru.otus.hw12.CacheEngine;
 import ru.otus.hw12.HibernateCacheService;
 import ru.otus.hw12.data.AddressDataSet;
 import ru.otus.hw12.data.UserDataSet;
@@ -18,8 +17,8 @@ import static ru.orus.hw12.constants.Constants.WEB_RESOURCES;
 public class Main {
     public static void main(String[] args) throws Exception {
         ResourceHandler resourceHandler = configResourceHandler();
-        CacheEngine<Long, UserDataSet> cache = startDbServiceWork();
-        ServletContextHandler contextHandler = configContextHandler(cache);
+        HibernateCacheService dbService = startDbServiceWork();
+        ServletContextHandler contextHandler = configContextHandler(dbService);
 
         Server server = configServer(resourceHandler, contextHandler);
 
@@ -32,10 +31,10 @@ public class Main {
         return resourceHandler;
     }
 
-    private static ServletContextHandler configContextHandler(CacheEngine<Long, UserDataSet> cache) {
+    private static ServletContextHandler configContextHandler(HibernateCacheService dbService) {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(LoginServlet.class, "/login");
-        context.addServlet(new ServletHolder(new CacheServlet(cache)), "/cache");
+        context.addServlet(new ServletHolder(new CacheServlet(dbService.getCache())), "/cache");
         return context;
     }
 
@@ -50,7 +49,7 @@ public class Main {
         server.join();
     }
 
-    private static CacheEngine<Long,UserDataSet> startDbServiceWork() {
+    private static HibernateCacheService startDbServiceWork() {
         HibernateCacheService dbService = new HibernateCacheService();
 
         new Thread(() -> {
@@ -65,6 +64,6 @@ public class Main {
             }
         }).start();
 
-        return dbService.getCache();
+        return dbService;
     }
 }
