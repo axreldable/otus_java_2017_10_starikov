@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static ru.orus.hw12.constants.Constants.CACHE_PAGE;
+import static ru.orus.hw12.constants.Constants.LOGIN;
+import static ru.orus.hw12.constants.Constants.PORT;
 
 public class CacheServlet extends Servlet {
+    public static boolean isLogin = false;
     private final CacheEngine<Long, UserDataSet> cache;
 
     public CacheServlet(CacheEngine<Long, UserDataSet> cache) {
@@ -23,13 +26,18 @@ public class CacheServlet extends Servlet {
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws IOException {
 
-        Map<String, Object> cacheParams = new HashMap<>();
-        cacheParams.put("hit", cache.getHitCount());
-        cacheParams.put("miss", cache.getMissCount());
-        cacheParams.put("size", cache.getSize());
+        if (isLogin) {
+            Map<String, Object> cacheParams = new HashMap<>();
+            cacheParams.put("hit", cache.getHitCount());
+            cacheParams.put("miss", cache.getMissCount());
+            cacheParams.put("size", cache.getSize());
 
-        response.getWriter().println(HtmlCreator.instance().create(CACHE_PAGE, cacheParams));
+            response.getWriter().println(HtmlCreator.instance().create(CACHE_PAGE, cacheParams));
+            setOK(response);
+        } else {
+            response.sendRedirect("http://localhost:" + PORT + "/" + LOGIN);
+        }
 
-        setOK(response);
+        isLogin = false;
     }
 }

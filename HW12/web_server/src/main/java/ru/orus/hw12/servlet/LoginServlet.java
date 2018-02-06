@@ -15,8 +15,6 @@ public class LoginServlet extends Servlet {
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws IOException {
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("messageWrong", "Wrong login or password!");
         response.getWriter().println(HtmlCreator.instance().create(LOGIN_PAGE, setMessageWrong("")));
 
         setOK(response);
@@ -30,10 +28,11 @@ public class LoginServlet extends Servlet {
 
 
         if (LOGIN_PASSWORD.equals(login) && LOGIN_PASSWORD.equals(password) ) {
+            CacheServlet.isLogin = true;
             response.sendRedirect("http://localhost:" + PORT + "/" + CACHE);
         }
         else {
-
+            CacheServlet.isLogin = false;
             response.getWriter().println(HtmlCreator.instance().create(LOGIN_PAGE, setMessageWrong("Wrong login or password!")));
             setOK(response);
         }
