@@ -2,6 +2,7 @@ package ru.orus.hw12.servlet;
 
 import ru.orus.hw12.html.page.create.HtmlCreator;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,10 +16,7 @@ public class LoginServlet extends Servlet {
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws IOException {
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("messageWrong", "Wrong login or password!");
         response.getWriter().println(HtmlCreator.instance().create(LOGIN_PAGE, setMessageWrong("")));
-
         setOK(response);
     }
 
@@ -29,14 +27,36 @@ public class LoginServlet extends Servlet {
         String password = request.getParameter(PASSWORD_VARIABLE_NAME);
 
 
-        if (LOGIN_PASSWORD.equals(login) && LOGIN_PASSWORD.equals(password) ) {
+        if (isLoginSuccess(login, password)) {
+            markTheUserAsLoginIn(response);
             response.sendRedirect("http://localhost:" + PORT + "/" + CACHE);
         }
         else {
-
+            markTheUserAsLoginOut(request, response);
             response.getWriter().println(HtmlCreator.instance().create(LOGIN_PAGE, setMessageWrong("Wrong login or password!")));
             setOK(response);
         }
+    }
+
+    private boolean isLoginSuccess(String login, String password) {
+        return LOGIN_PASSWORD.equals(login) && LOGIN_PASSWORD.equals(password);
+    }
+
+    private void markTheUserAsLoginOut(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        if( cookies != null ) {
+            for (Cookie cookie : cookies) {
+                if (LOGIN_FOR_CACHE.equals(cookie.getName())) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
+        }
+    }
+
+    private void markTheUserAsLoginIn(HttpServletResponse response) {
+        Cookie mark = new Cookie(LOGIN_FOR_CACHE, "WAS_LOGIN");
+        response.addCookie(mark);
     }
 
     private Map<String,Object> setMessageWrong(String message) {
