@@ -1,6 +1,7 @@
 package ru.otus.hw13;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.otus.hw13.data.AddressDataSet;
 import ru.otus.hw13.data.UserDataSet;
@@ -18,6 +19,7 @@ public class HibernateCacheServiceTest {
     }
 
     @Test
+    @Ignore
     public void hibernateTest() throws InterruptedException {
         service = new HibernateCacheService();
         serviceTest();

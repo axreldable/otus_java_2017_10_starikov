@@ -1,53 +1,51 @@
 package ru.otus.hw13.servlet;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.otus.hw13.data.AddressDataSet;
-import ru.otus.hw13.html.page.create.HtmlCreator;
 import ru.otus.hw13.CacheEngine;
-import ru.otus.hw13.HibernateCacheService;
 import ru.otus.hw13.data.UserDataSet;
+import ru.otus.hw13.html.page.create.HtmlCreator;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.otus.hw13.constants.Constants.CACHE_PAGE;
+import static ru.otus.hw13.constants.Constants.*;
 
 public class CacheServlet extends Servlet {
-    private CacheEngine<Long, UserDataSet> cache;
-    private HibernateCacheService service;
+    private final CacheEngine<Long, UserDataSet> cache;
 
-    @Override
-    public void init() {
-        //TODO: Create one context for the application. Inject beans.
-        ApplicationContext context = new ClassPathXmlApplicationContext("SpringBeans.xml");
-        service = (HibernateCacheService) context.getBean("cacheService");
-        cache = service.getCache();
+    public CacheServlet(CacheEngine<Long, UserDataSet> cache) {
+        this.cache = cache;
     }
 
     @Override
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws IOException {
 
-        workWithService();
+        if (isLogin(request)) {
+            Map<String, Object> cacheParams = new HashMap<>();
+            cacheParams.put("hit", cache.getHitCount());
+            cacheParams.put("miss", cache.getMissCount());
+            cacheParams.put("size", cache.getSize());
 
-        Map<String, Object> cacheParams = new HashMap<>();
-        cacheParams.put("hit", cache.getHitCount());
-        cacheParams.put("miss", cache.getMissCount());
-        cacheParams.put("size", cache.getSize());
-
-        response.getWriter().println(HtmlCreator.instance().create(CACHE_PAGE, cacheParams));
-
-        setOK(response);
+            response.getWriter().println(HtmlCreator.instance().create(CACHE_PAGE, cacheParams));
+            setOK(response);
+        } else {
+            response.sendRedirect("http://localhost:" + PORT + "/" + LOGIN);
+        }
     }
 
-    private void workWithService() {
-        for (int i = 0; i < 100; i++) {
-            service.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
-            service.load(1);
+    private boolean isLogin(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if( cookies != null ) {
+            for (Cookie cookie : cookies) {
+                if (LOGIN_FOR_CACHE.equals(cookie.getName())) {
+                    return true;
+                }
+            }
         }
+        return false;
     }
 }
