@@ -1,13 +1,15 @@
 package ru.otus.hw13.servlet;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.hw13.CacheEngine;
 import ru.otus.hw13.HibernateCacheService;
 import ru.otus.hw13.data.AddressDataSet;
 import ru.otus.hw13.data.UserDataSet;
 import ru.otus.hw13.html.page.create.HtmlCreator;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -18,15 +20,18 @@ import java.util.Map;
 
 import static ru.otus.hw13.constants.Constants.*;
 
+@Configurable
 public class CacheServlet extends Servlet {
     private CacheEngine<Long, UserDataSet> cache;
 
+    @Autowired
+    private HibernateCacheService cacheService;
+
     @Override
-    public void init() throws ServletException {
-        super.init();
-        ApplicationContext context = new ClassPathXmlApplicationContext("SpringBeans.xml");
-        HibernateCacheService cacheService = (HibernateCacheService) context.getBean("cacheService");
-        startDbServiceWork(cacheService);
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+        startDbServiceWork();
         cache = cacheService.getCache();
     }
 
@@ -59,12 +64,12 @@ public class CacheServlet extends Servlet {
         return false;
     }
 
-    private void startDbServiceWork(HibernateCacheService dbService) {
+    private void startDbServiceWork() {
         new Thread(() -> {
             try {
                 while (true) {
-                    dbService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
-                    dbService.load(1);
+                    cacheService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
+                    cacheService.load(1);
                     Thread.sleep(100);
                 }
             } catch (InterruptedException e) {

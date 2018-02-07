@@ -1,6 +1,7 @@
 package ru.otus.hw13;
 
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 import ru.otus.hw13.data.UserDataSet;
 import ru.otus.hw13.service.HibernateServiceImpl;
 
@@ -9,8 +10,12 @@ import java.util.List;
 import static ru.otus.hw13.Constants.CACHE_LIFE_TIME;
 import static ru.otus.hw13.Constants.CACHE_SIZE;
 
+@Component
 public class HibernateCacheService extends HibernateServiceImpl {
     @Getter private final CacheEngine<Long, UserDataSet> cache = CacheEngineFactory.create(CACHE_SIZE, CACHE_LIFE_TIME, 0);
+
+    public HibernateCacheService() {
+    }
 
     @Override
     public UserDataSet load(long id) {
