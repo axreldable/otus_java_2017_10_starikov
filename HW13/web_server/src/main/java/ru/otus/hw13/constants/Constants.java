@@ -1,8 +1,7 @@
 package ru.otus.hw13.constants;
 
 public interface Constants {
-    int PORT = 8091;
-    String WEB_RESOURCES = "web_resources";
+    int PORT = 8080;
     String CACHE_PAGE = "cache_page.html";
     String LOGIN_PAGE = "login_page.html";
     String CACHE= "cache";

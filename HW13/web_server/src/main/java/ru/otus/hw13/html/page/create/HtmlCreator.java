@@ -11,13 +11,13 @@ import java.io.Writer;
 import java.util.Map;
 
 public class HtmlCreator {
-    private static final String HTML_DIR = "web_resources";
     private static HtmlCreator instance = new HtmlCreator();
 
     private final Configuration configuration;
 
     private HtmlCreator() {
         configuration = new Configuration();
+        configuration.setClassForTemplateLoading(this.getClass(), "/tml/");
     }
 
     public static HtmlCreator instance() {
@@ -26,7 +26,7 @@ public class HtmlCreator {
 
     public String create(String filename, Map<String, Object> data) throws IOException {
         try (Writer stream = new StringWriter()) {
-            Template template = configuration.getTemplate(HTML_DIR + File.separator + filename);
+            Template template = configuration.getTemplate(filename);
             template.process(data, stream);
             return stream.toString();
         } catch (TemplateException e) {
