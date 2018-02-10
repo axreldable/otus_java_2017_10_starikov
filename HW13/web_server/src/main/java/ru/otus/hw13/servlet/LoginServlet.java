@@ -29,7 +29,7 @@ public class LoginServlet extends Servlet {
 
         if (isLoginSuccess(login, password)) {
             markTheUserAsLoginIn(response);
-            response.sendRedirect("http://localhost:" + PORT + "/" + CACHE);
+            response.sendRedirect("/" + CACHE);
         }
         else {
             markTheUserAsLoginOut(request, response);

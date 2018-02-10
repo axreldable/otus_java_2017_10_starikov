@@ -33,6 +33,7 @@ public class CacheServlet extends Servlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
         startDbServiceWork();
         cache = cacheService.getCache();
+        System.out.println();
     }
 
     @Override
@@ -48,7 +49,7 @@ public class CacheServlet extends Servlet {
             response.getWriter().println(HtmlCreator.instance().create(CACHE_PAGE, cacheParams));
             setOK(response);
         } else {
-            response.sendRedirect("http://localhost:" + PORT + "/" + LOGIN);
+            response.sendRedirect("/" + LOGIN);
         }
     }
 
