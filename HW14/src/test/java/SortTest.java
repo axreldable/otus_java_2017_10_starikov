@@ -1,13 +1,13 @@
 import org.junit.Test;
-import sort.MultiThreadSorter;
+import multi.sort.MultiThreadSorter;
 
 import static org.junit.Assert.*;
 import static util.ArrayUtils.*;
 
 public class SortTest {
     @Test
-    public void test() {
-        int[] array1 = getRandomArray(36);
+    public void test() throws InterruptedException {
+        int[] array1 = getRandomArray(37);
         int[] array2 = copy(array1);
 
         System.out.println("Not sorted array:");
