@@ -1,6 +1,10 @@
 package multi.sort;
 
 import util.ArrayUtils;
+import util.ThreadUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static util.ArrayUtils.copyPart;
 import static util.ArrayUtils.merge;
@@ -16,19 +20,21 @@ public class MultiThreadSorter {
     }
 
     private void multiSort(int[] ar) throws InterruptedException {
-        ThreadSorter[] sorters = createAndStart(ar);
+        Map<Thread, Runnable> sortersMap = createThreadsMap(ar);
 
-        waitSorters(sorters);
+        ThreadUtils.start(sortersMap.keySet());
 
-        int[] mergeSorters = mergeSorters(sorters);
+        ThreadUtils.wait(sortersMap.keySet());
+
+        int[] mergeSorters = mergeSorters(sortersMap.values().toArray());
 
         System.arraycopy(mergeSorters, 0, ar, 0, ar.length);
     }
 
-    private ThreadSorter[] createAndStart(int[] ar) {
+    private Map<Thread, Runnable> createThreadsMap(int[] ar) {
         int elemInArray = ar.length / THREADS_AMOUNT;
 
-        ThreadSorter[] result = new ThreadSorter[THREADS_AMOUNT];
+        Map<Thread, Runnable> result = new HashMap<>();
 
         for (int i = 0; i < THREADS_AMOUNT; i++) {
             int start = i * elemInArray;
@@ -36,9 +42,8 @@ public class MultiThreadSorter {
             if (isLastIter(i)) {
                 end = ar.length;
             }
-            ThreadSorter sorter = new ThreadSorter(copyPart(ar, start, end));
-            sorter.start();
-            result[i] = sorter;
+            RunnableSorter sorter = new RunnableSorter(copyPart(ar, start, end));
+            result.put(new Thread(sorter), sorter);
         }
 
         return result;
@@ -48,16 +53,10 @@ public class MultiThreadSorter {
         return (i + 1) == THREADS_AMOUNT;
     }
 
-    private void waitSorters(ThreadSorter[] sorters) throws InterruptedException {
-        for (ThreadSorter sorter : sorters) {
-            sorter.join();
-        }
-    }
-
-    private int[] mergeSorters(ThreadSorter[] sorters) {
-        int[] mergeAr = sorters[0].getAr();
+    private int[] mergeSorters(Object[] sorters) {
+        int[] mergeAr = ((RunnableSorter) sorters[0]).getAr();
         for (int i = 1; i < THREADS_AMOUNT; i++) {
-            mergeAr = merge(mergeAr, sorters[i].getAr());
+            mergeAr = merge(mergeAr,((RunnableSorter) sorters[i]).getAr());
         }
         return mergeAr;
     }

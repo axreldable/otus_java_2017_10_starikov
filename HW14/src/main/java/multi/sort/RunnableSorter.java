@@ -4,10 +4,10 @@ import lombok.Getter;
 
 import static util.ArrayUtils.sort;
 
-public class ThreadSorter extends Thread {
+public class RunnableSorter implements Runnable {
     @Getter private int[] ar;
 
-    public ThreadSorter(int[] ar) {
+    public RunnableSorter(int[] ar) {
         this.ar = ar;
     }
 
