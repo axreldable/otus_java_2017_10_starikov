@@ -21,6 +21,7 @@
         <module>hibernate</module>
         <module>hibernate_cache</module>
         <module>web_server</module>
+        <module>message_system</module>
     </modules>
 
     <dependencies>

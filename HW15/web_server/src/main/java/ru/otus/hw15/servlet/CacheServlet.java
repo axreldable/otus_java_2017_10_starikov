@@ -64,6 +64,7 @@ public class CacheServlet extends Servlet {
         return false;
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     private void startDbServiceWork() {
         new Thread(() -> {
             try {
