@@ -3,12 +3,14 @@ package ru.otus.hw15.html.page.create;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import lombok.ToString;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
+@ToString
 public class HtmlCreator {
     private static HtmlCreator instance = new HtmlCreator();
 

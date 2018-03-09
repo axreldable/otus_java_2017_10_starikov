@@ -5,6 +5,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import ru.otus.hw15.data.AddressDataSet;
 import ru.otus.hw15.data.UserDataSet;
+import ru.otus.hw15.messageSystem.MessageSystem;
+import ru.otus.hw15.messageSystem.MessageSystemContext;
 import ru.otus.hw15.service.DBService;
 import ru.otus.hw15.HibernateCacheService;
 
@@ -22,7 +24,7 @@ public class HibernateCacheServiceTest {
     @Test
     @Ignore
     public void hibernateTest() throws InterruptedException {
-        service = new HibernateCacheService();
+        service = new HibernateCacheService(new MessageSystemContext(new MessageSystem()));
         serviceTest();
     }
 

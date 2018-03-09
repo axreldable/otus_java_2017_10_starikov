@@ -5,4 +5,6 @@ package ru.otus.hw15.messageSystem;
  */
 public interface Addressee {
     Address getAddress();
+
+    MessageSystem getMS();
 }

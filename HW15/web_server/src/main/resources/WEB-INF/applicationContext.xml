@@ -11,6 +11,13 @@
     <context:component-scan base-package="ru.otus.hw15"></context:component-scan>
     <context:annotation-config/>
     <context:spring-configured/>
-    <bean id="cacheService" class="ru.otus.hw15.HibernateCacheService"></bean>
+
+    <bean id="dbAddress" class="ru.otus.hw15.messageSystem.Address">
+        <constructor-arg index="0" value="DB"/>
+    </bean>
+
+    <bean id="frontAddress" class="ru.otus.hw15.messageSystem.Address">
+        <constructor-arg index="0" value="Frontend"/>
+    </bean>
 
 </beans>

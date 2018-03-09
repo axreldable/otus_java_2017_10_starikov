@@ -2,13 +2,12 @@ package ru.otus.hw15.servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import ru.otus.hw15.CacheEngine;
-import ru.otus.hw15.HibernateCacheService;
-import ru.otus.hw15.data.AddressDataSet;
-import ru.otus.hw15.data.UserDataSet;
-import ru.otus.hw15.html.page.create.HtmlCreator;
 import ru.otus.hw15.constants.Constants;
+import ru.otus.hw15.front.FrontendServiceImpl;
+import ru.otus.hw15.html.page.create.HtmlCreator;
+import ru.otus.hw15.model.CacheParams;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -18,34 +17,54 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Configurable
+@Component
 public class CacheServlet extends Servlet {
-    private CacheEngine<Long, UserDataSet> cache;
+    private final static Logger logger = Logger.getLogger(CacheServlet.class.getName());
+    private CacheParams cacheParams = new CacheParams(0, 0, 0);
+
+    public void setCacheParams(CacheParams cacheParams) {
+        logger.info("in setCacheParams, cacheParams: " + cacheParams);
+        this.cacheParams = cacheParams;
+        logger.info("in setCacheParams, cacheParams after set: " + this.cacheParams);
+    }
 
     @Autowired
-    private HibernateCacheService cacheService;
+    private FrontendServiceImpl frontendService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-        startDbServiceWork();
-        cache = cacheService.getCache();
-        System.out.println();
+        logger.info("Create " + frontendService);
     }
 
     @Override
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws IOException {
 
-        if (isLogin(request)) {
-            Map<String, Object> cacheParams = new HashMap<>();
-            cacheParams.put("hit", cache.getHitCount());
-            cacheParams.put("miss", cache.getMissCount());
-            cacheParams.put("size", cache.getSize());
 
-            response.getWriter().println(HtmlCreator.instance().create(Constants.CACHE_PAGE, cacheParams));
+        if (isLogin(request)) {
+            frontendService.getCacheReport();
+            logger.info("exec frontendService.getCacheReport()");
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            logger.info("in isLogin. cacheParams: " + cacheParams);
+
+            Map<String, Object> cacheParamsMap = new HashMap<>();
+            cacheParamsMap.put("hit", cacheParams.getHint());
+            cacheParamsMap.put("miss", cacheParams.getMiss());
+            cacheParamsMap.put("size", cacheParams.getSize());
+
+            logger.info("cacheParamsMap: " + cacheParamsMap);
+            response.getWriter().println(HtmlCreator.instance().create(Constants.CACHE_PAGE, cacheParamsMap));
             setOK(response);
         } else {
             response.sendRedirect("/" + Constants.LOGIN);
@@ -62,20 +81,5 @@ public class CacheServlet extends Servlet {
             }
         }
         return false;
-    }
-
-    @SuppressWarnings("InfiniteLoopStatement")
-    private void startDbServiceWork() {
-        new Thread(() -> {
-            try {
-                while (true) {
-                    cacheService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
-                    cacheService.load(1);
-                    Thread.sleep(100);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
 }
