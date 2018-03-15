@@ -16,28 +16,16 @@ public class DBStarter {
     @PostConstruct
     @SuppressWarnings("InfiniteLoopStatement")
     private void startDbServiceWork() {
-//        new Thread(() -> {
-//            try {
-//                while (true) {
-//                    cacheService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
-//                    cacheService.load(1);
-//                    Thread.sleep(100);
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
-
-        try {
-            int i = 0;
-            while (i < 5) {
-                i++;
-                cacheService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
-                cacheService.load(1);
-                Thread.sleep(100);
+        new Thread(() -> {
+            try {
+                while (true) {
+                    cacheService.save(new UserDataSet("name1", 26, new AddressDataSet("some street")));
+                    cacheService.load(1);
+                    Thread.sleep(100);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        }).start();
     }
 }

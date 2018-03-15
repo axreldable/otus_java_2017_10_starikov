@@ -26,6 +26,8 @@ public class MsgGetCashParams extends MsgToDB {
                 .size(cache.getSize())
                 .build();
         logger.info("cache params are: " + cacheParams);
+        logger.info("getTo " + getTo());
+        logger.info("getFrom " + getFrom());
         cacheService.getMS().sendMessage(new MsgCacheParamsAnswer(getTo(), getFrom(), cacheParams));
     }
 }

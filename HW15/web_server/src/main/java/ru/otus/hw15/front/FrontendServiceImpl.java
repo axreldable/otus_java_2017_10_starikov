@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.otus.hw15.app.FrontendService;
 import ru.otus.hw15.message.MsgGetCashParams;
-import ru.otus.hw15.messageSystem.*;
+import ru.otus.hw15.messageSystem.Address;
+import ru.otus.hw15.messageSystem.Message;
+import ru.otus.hw15.messageSystem.MessageSystem;
+import ru.otus.hw15.messageSystem.MessageSystemContext;
 import ru.otus.hw15.model.CacheParams;
-import ru.otus.hw15.servlet.CacheServlet;
+import ru.otus.hw15.ws.WebSocket;
 
 import javax.annotation.PostConstruct;
 import java.util.logging.Logger;
@@ -18,8 +21,7 @@ public class FrontendServiceImpl implements FrontendService {
     @Autowired
     private Address frontAddress;
     @Autowired
-    private CacheServlet cacheServlet;
-
+    private WebSocket socket;
 
     private final MessageSystemContext context;
 
@@ -51,8 +53,8 @@ public class FrontendServiceImpl implements FrontendService {
     }
 
     @Override
-    public void setCacheReport(CacheParams cacheParams) {
+    public void sendCache(CacheParams cacheParams) {
         logger.info("in send cache report, cacheParams: " + cacheParams);
-        cacheServlet.setCacheParams(cacheParams);
+        socket.sendMessage(cacheParams.toString());
     }
 }

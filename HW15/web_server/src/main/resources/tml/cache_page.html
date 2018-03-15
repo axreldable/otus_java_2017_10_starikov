@@ -7,9 +7,26 @@
 <body>
     <p>Link to start page: <a href="start_page.html">Start</a> </p>
     <p>This is cache page</p>
-
-    <p>hit: ${hit}</p>
-    <p>miss: ${miss}</p>
-    <p>size: ${size}</p>
+    <br><textarea id="messageTextArea" rows="10" cols="50"></textarea>
+    <button onclick="myFunction()">get cache params</button>
+    <script type="text/javascript">
+        var webSocket = new WebSocket("ws://localhost:8080/cache_web_socket");
+        var messageTextArea = document.getElementById("messageTextArea");
+        webSocket.onopen = function (message) { processOpen(message) };
+        webSocket.onmessage = function (message) { processMessage(message) };
+        webSocket.onerror = function (message) { processError(message) };
+        function processOpen(message) {
+            messageTextArea.value += "Server Connect..."+"\n";
+        }
+        function processMessage(message) {
+            messageTextArea.value += "Receive from server: " + message.data + "\n";
+        }
+        function processError(message) {
+            messageTextArea.value += "error" + "\n";
+        }
+        function myFunction() {
+            webSocket.send("message to web socket")
+        }
+    </script>
 </body>
 </html>

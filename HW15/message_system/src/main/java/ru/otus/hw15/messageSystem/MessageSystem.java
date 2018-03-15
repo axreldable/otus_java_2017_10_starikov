@@ -25,6 +25,7 @@ public final class MessageSystem {
     }
 
     public void sendMessage(Message message) {
+        logger.info("mesMap " + messagesMap);
         messagesMap.get(message.getTo()).add(message);
     }
 
